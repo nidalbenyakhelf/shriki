@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="theme-color" content="#00050d"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes"/>
+<title>لوحتي — شريك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/home/home.css"/>
+</head>
+<body data-page="dashboard">
+
+<div class="page-bar">
+  <a href="/" class="btn btn-quiet"><i data-lucide="arrow-right"></i> رجوع</a>
+  <div class="page-title">لوحتي</div>
+  <a href="/search/search.html" class="icon-btn" aria-label="بحث"><i data-lucide="search"></i></a>
+</div>
+
+<main class="wrap narrow dash-main">
+  <section id="gate">
+    <div class="sec-head"><h2 id="gateTitle">جارٍ التحميل…</h2><p id="gateText">نتحقّق من جلستك.</p></div>
+    <div class="gate-card">
+      <button id="gateBtn" type="button" class="btn btn-primary btn-block"><i data-lucide="user-plus"></i> أنشئ ملفّي</button>
+      <p class="tiny" id="gateHint"></p>
+    </div>
+  </section>
+
+  <section id="panel" hidden>
+    <div class="dash-head" id="dashHead"></div>
+    <div class="seg" id="dashTabs" style="margin-bottom:18px">
+      <button type="button" class="seg-btn active" data-d="incoming"><i data-lucide="inbox"></i> واردة <span class="badge" id="bIn"></span></button>
+      <button type="button" class="seg-btn" data-d="outgoing"><i data-lucide="send"></i> صادرة <span class="badge" id="bOut"></span></button>
+    </div>
+    <div class="req-list" id="reqList"></div>
+    <div style="margin-top:24px;text-align:center"><button id="switchAcc" type="button" class="btn btn-quiet"><i data-lucide="log-out"></i> إنهاء الجلسة على هذا الجهاز</button></div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="/home/home.js"></script>
+</body>
+</html>
