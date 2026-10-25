@@ -59,7 +59,8 @@
         <label class="field"><span class="field-label">بريدك الإلكتروني</span><input name="email" type="email" class="input" required placeholder="name@univ-medea.dz"/></label>
         <div class="field-row">
           <label class="field"><span class="field-label">هاتف / واتساب (اختياري)</span><input name="phone" class="input" inputmode="tel" placeholder="0X XX XX XX XX"/></label>
-          <label class="field"><span class="field-label">LinkedIn (اختياري)</span><input name="linkedin" class="input" type="url" placeholder="https://linkedin.com/in/…"/></label>
+          <!-- ★ تم تغيير LinkedIn إلى رابط عام ★ -->
+          <label class="field"><span class="field-label">رابط حسابك أو موقعك (اختياري)</span><input name="linkedin" class="input" type="url" placeholder="فيسبوك، إنستغرام، لينكدإن، أو موقع شخصي"/></label>
         </div>
       </fieldset>
 
@@ -72,7 +73,18 @@
       <div class="success-icon"><i data-lucide="key-round"></i></div>
       <h2>رمزك العامّ جاهز</h2>
       <p>به يبحث عنك الزملاء ويتواصلون معك. احتفظ به، وشارك مشروعك لتصلك الطلبات أسرع.</p>
-      <div class="code-box"><span id="resultCode" class="code-value">SHRK-XXXXXXXX</span><button id="copyCode" type="button" class="btn btn-glass btn-sm" data-copy=""><i data-lucide="copy"></i> نسخ الرمز</button></div>
+      
+      <div class="code-box">
+        <span id="resultCode" class="code-value">SHRK-XXXXXXXX</span>
+        <button id="copyCode" type="button" class="btn btn-glass btn-sm" data-copy=""><i data-lucide="copy"></i> نسخ الرمز</button>
+        
+        <!-- ★ نصيحة لقطة الشاشة الجديدة ★ -->
+        <p style="font-size:.75rem; color:var(--ink-3); margin-top:8px; display:flex; align-items:center; gap:4px; justify-content:center;">
+          <i data-lucide="camera" style="width:12px;height:12px;"></i> 
+          💡 نصيحة: التقط صورة للشاشة الآن واحتفظ بها!
+        </p>
+      </div>
+
       <div class="success-actions">
         <button id="shareProj" type="button" class="btn btn-primary btn-block"><i data-lucide="share-2"></i> شارك مشروعك الآن</button>
         <a href="../search/search.html?tab=partners" class="btn btn-glass btn-block"><i data-lucide="user-search"></i> ابحث عمّن يُكمّل فريقك</a>
