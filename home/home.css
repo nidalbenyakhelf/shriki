@@ -1,6 +1,7 @@
 /* ============================================================
    شريك — أزرق ليلي موحّد | #00050d · #197fd3 · #ffffff
-   MOBILE-FIRST STRICT + Stable Release v2
+   MOBILE-FIRST STRICT + SAFE ICONS SYSTEM (No External Libs)
+   تم إزالة الاعتماد على Lucide لتجنب أخطاء الحظر (AdBlock).
    ============================================================ */
 :root{
   --bg:#00050d;
@@ -25,7 +26,7 @@ body{font-family:"Cairo",system-ui,sans-serif;background:var(--bg);color:var(--i
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
-img{display:block;max-width:100%}svg{display:block}i[data-lucide]{display:inline-flex}
+img{display:block;max-width:100%}svg{display:block}
 h1,h2,h3{line-height:1.2;letter-spacing:-.02em;font-weight:700;color:var(--ink)}
 p{color:var(--ink-2)}main{flex:1}
 .wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:16px}
@@ -36,6 +37,74 @@ p{color:var(--ink-2)}main{flex:1}
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.spin{animation:none!important}}
 .spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== ★ نظام الأيقونات الآمن (Safe Icons System) ★ =====
+   نستبدل مكتبة Lucide الخارجية بـ Emojis مدمجة في CSS.
+   هذا يمنع خطأ ERR_BLOCKED_BY_CLIENT الذي يكسر الموقع.
+   ================================================================== */
+i[data-lucide] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  font-style: normal;
+  font-size: inherit;
+  vertical-align: middle;
+  margin-inline-end: 4px;
+  color: currentColor; /* يرث لون النص المحيط به */
+}
+
+/* تعيين الرموز لكل أيقونة مستخدمة في المشروع */
+i[data-lucide="search"]::before { content: "🔍"; }
+i[data-lucide="user"]::before, i[data-lucide="users"]::before { content: "👤"; }
+i[data-lucide="users-round"]::before { content: "👥"; }
+i[data-lucide="arrow-right"]::before { content: "→"; font-weight: bold; }
+i[data-lucide="arrow-left"]::before { content: "←"; font-weight: bold; }
+i[data-lucide="x"]::before { content: "✕"; color: var(--danger); font-weight: bold; }
+i[data-lucide="menu"]::before { content: "☰"; font-size: 1.1em; }
+i[data-lucide="rocket"]::before { content: "🚀"; }
+i[data-lucide="lightbulb"]::before { content: "💡"; }
+i[data-lucide="message-circle"]::before { content: "💬"; }
+i[data-lucide="graduation-cap"]::before { content: "🎓"; }
+i[data-lucide="heart"]::before { content: "❤️"; }
+i[data-lucide="shield-check"]::before, i[data-lucide="shield-lock"]::before { content: "🛡️"; }
+i[data-lucide="copy"]::before { content: "📋"; }
+i[data-lucide="share-2"]::before { content: "↗️"; }
+i[data-lucide="chevron-down"]::before { content: "▼"; font-size: 0.8em; opacity: 0.7; }
+i[data-lucide="building-2"]::before { content: "🏢"; }
+i[data-lucide="tag"]::before { content: "🏷️"; }
+i[data-lucide="file-plus-2"]::before { content: "📄"; }
+i[data-lucide="user-search"]::before { content: "🔎"; }
+i[data-lucide="handshake"]::before { content: "🤝"; }
+i[data-lucide="trophy"]::before { content: "🏆"; }
+i[data-lucide="heart-handshake"]::before { content: "❤️‍"; } /* رمز تعاطف/خيري */
+i[data-lucide="square-pen"]::before { content: "✏️"; }
+i[data-lucide="mail"]::before { content: "✉️"; }
+i[data-lucide="phone"]::before { content: "📞"; }
+i[data-lucide="link"]::before { content: "🔗"; }
+i[data-lucide="inbox"]::before { content: "📥"; }
+i[data-lucide="log-out"]::before { content: "🚪"; }
+i[data-lucide="trash-2"]::before { content: "🗑️"; }
+i[data-lucide="key-round"]::before { content: "🔑"; }
+i[data-lucide="camera"]::before { content: "📸"; }
+i[data-lucide="hash"]::before { content: "#"; font-family: monospace; font-weight: bold; }
+i[data-lucide="send"]::before { content: "➤"; transform: rotate(-45deg); display: inline-block; }
+i[data-lucide="check-circle-2"]::before { content: "✅"; }
+i[data-lucide="x-circle"]::before { content: "❌"; }
+i[data-lucide="alert-triangle"]::before { content: "⚠️"; }
+i[data-lucide="info"]::before { content: "ℹ️"; }
+i[data-lucide="loader-2"]::before { content: "◌"; animation: spin 1s linear infinite; color: var(--accent-sky); font-size: 1.2em; }
+i[data-lucide="wifi-off"]::before { content: "📵"; }
+i[data-lucide="folder-search"]::before { content: "📂"; }
+i[data-lucide="eye-off"]::before { content: "🙈"; }
+i[data-lucide="reply"]::before { content: "↩️"; }
+i[data-lucide="plus"]::before { content: "+"; font-weight: bold; font-size: 1.2em; }
+i[data-lucide="check"]::before { content: "✓"; font-weight: bold; color: var(--ok); }
+
+/* إخفاء أي SVG متبقية إذا كانت هناك مشاكل سابقة */
+svg.lucide-icon { display: none !important; }
+
 
 /* ===== أزرار ===== */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:46px;padding:0 18px;border-radius:var(--r-sm);font-weight:700;font-size:.9rem;transition:.2s var(--ease);white-space:nowrap;border:none;width:100%; max-width: 300px;}
