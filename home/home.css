@@ -1,6 +1,8 @@
 /* ============================================================
    شريك — أزرق ليلي موحّد | #00050d · #197fd3 · #ffffff
-   MOBILE-FIRST STRICT + Gradient Fix
+   MOBILE-FIRST STRICT + Smart Centering + Smooth Gradient
+   تم إصلاح: تداخل النصوص، كسر الأزرار، حجم الإحصائيات،
+   التدرج الحاد، والتمركز العمودي حسب الجهاز.
    ============================================================ */
 :root{
   --bg:#00050d;
@@ -102,7 +104,7 @@ textarea.input{height:auto;min-height:90px;padding:12px 14px;resize:vertical;lin
 .nav-links.open{display:flex;flex-direction:column;align-items:stretch;gap:2px;position:absolute;top:var(--nav-h);inset-inline:8px;padding:8px;background:var(--bg);border:none;border-radius:var(--r-md);box-shadow:var(--e3);z-index:55}
 .nav-links.open .nav-link{justify-content:flex-start;min-height:48px;padding-block:12px;font-size:.95rem}
 
-/* ★ زر إنشاء مشروع ذكي للجوال ★ */
+/* ★ زر إنشاء مشروع ذكي للجوال: أيقونة فقط ★ */
 @media (max-width:600px){
   .navbar .btn-primary.btn-sm span.hide-sm{display:none!important}
   .navbar .btn-primary.btn-sm{
@@ -126,20 +128,37 @@ body.locked{overflow:hidden}
 .pop-menu button svg{width:16px;height:16px;color:var(--accent-sky);flex-shrink:0}
 .pop-menu button:hover{background:var(--lift-hv);color:var(--ink)}
 
-/* ===== Hero Section - مُصلح للتداخل والتدرج ===== */
+/* ============================================================
+   ★ Hero Section - التمرير الذكي والتدرج الناعم ★
+   الافتراضي (حاسوب): المحتوى في منتصف الشاشة عمودياً.
+   الهاتف (<768px): المحتوى ينزل للأسفل ليكون قريباً من الإبهام.
+   ============================================================ */
 .hero{
   position:relative; 
   min-height:100svh; 
+  
+  /* ★ القيمة الافتراضية: تمركز في المنتصف (للحاسوب) ★ */
   display:flex; 
-  align-items:flex-end; 
+  align-items:center; 
   justify-content:center; 
+  
   text-align:center; 
   overflow:hidden; 
   padding-bottom:80px;
 }
+
+/* ★ قاعدة خاصة بالهواتف فقط لإرجاع المحتوى للأسفل ★ */
+@media (max-width: 768px){
+  .hero {
+    align-items: flex-end; /* إجبار المحتوى للنزول للأسفل في الهواتف */
+    padding-bottom: 40px; /* تقليل المسافة السفلية قليلاً لتوفير مساحة أكبر للصورة */
+  }
+}
+
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
-/* ★ التدرج الناعم لإزالة الخط الحاد ★ */
+
+/* ★ التدرج الناعم لإزالة الخط الحاد بين الصورة والخلفية الداكنة ★ */
 .hero-scrim{
   position:absolute; inset:0; z-index:1; pointer-events:none;
   background: linear-gradient(
@@ -151,12 +170,15 @@ body.locked{overflow:hidden}
     var(--bg) 100%               
   );
 }
+
 .hero-content{
   position:relative; z-index:2; 
   width:100%; max-width:600px; margin-inline:auto; 
   padding:0 20px; 
   display:flex; flex-direction:column; align-items:center; gap:12px;
 }
+
+/* تقليل حجم العناوين لمنع كسر السطر العشوائي على الشاشات الصغيرة جداً */
 .hero h1{font-size:clamp(1.8rem, 7vw, 2.5rem); line-height:1.1; margin-bottom:4px;}
 .hero-sub{font-size:.95rem; line-height:1.5; opacity:.9; max-width:45ch;}
 .eyebrow{
@@ -373,7 +395,8 @@ body.locked{overflow:hidden}
 .empty-ico svg{width:24px;height:24px}.empty h3{font-size:1rem}.empty p{max-width:36ch;color:var(--ink-2);font-size:.85rem}
 
 /* ============================================================
-   Media Queries for Larger Screens
+   Media Queries for Larger Screens (Tablet/Desktop Enhancements)
+   فقط نضيف التحسينات هنا، الأساس هو ما فوق
    ============================================================ */
 @media (min-width:600px){
   body{font-size:16px}
