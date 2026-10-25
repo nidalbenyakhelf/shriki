@@ -1,6 +1,7 @@
 /* ============================================================
    شريك — الملف الموحد (All-in-One Bundle)
    يتضمن: Firebase Setup + Utils + Constants + Store + UI Logic
+           + Direct Contact Logic + Admin Panel Logic
    مسارات نسبية تعمل على GitHub Pages / Vercel بدون تعقيدات.
    ============================================================ */
 
@@ -41,7 +42,7 @@
   const COL_P = "shrik_profiles";
   const COL_C = "shrik_contacts";
   const COL_R = "shrik_requests";
-  const COL_S = "shrik_suggestions";
+  const COL_S = "shrik_suggestions"; // نفس المجموعة للاقتراحات والرسائل المباشرة
 
   // ==========================================
   // 3. أدوات مساعدة (Utilities)
@@ -224,6 +225,20 @@
     await db.collection(COL_S).add({...s,status:"new",source:"homepage_suggest",createdAt:FV.serverTimestamp()});
   }
 
+  // ★ دالة جديدة: حفظ رسالة التواصل المباشر ★
+  async function saveDirectMessage(data) {
+    const s = {
+      senderName: cleanStr(data.senderName, 60),
+      senderEmail: cleanStr(data.senderEmail, 120).toLowerCase(),
+      messageBody: cleanStr(data.messageBody, 1000),
+      type: "contact_message", // تمييزها عن الاقتراحات العادية
+      status: "new",
+      source: "homepage_contact_modal",
+      createdAt: FV.serverTimestamp()
+    };
+    await db.collection(COL_S).add(s);
+  }
+
   async function stats() {
     const all = await fetchAllProfiles();
     return {
@@ -231,6 +246,21 @@
       partners: all.filter(a=>a.kind==="student").length,
       faculties: new Set(all.map(a=>a.faculty).filter(Boolean)).size
     };
+  }
+
+  // ★ دالة جديدة: جلب جميع الرسائل والاقتراحات لصفحة الإدارة ★
+  async function fetchAllMessages() {
+    try {
+      const snap = await db.collection(COL_S).orderBy("createdAt", "desc").limit(200).get();
+      return snap.docs.map(d => ({
+        id: d.id,
+        ...d.data(),
+        createdAt: d.data().createdAt ? d.data().createdAt.toDate().toLocaleDateString('ar-DZ', { day:'numeric', month:'long', year:'numeric' }) : ""
+      }));
+    } catch(err) {
+      console.error("Admin Fetch Error:", err);
+      return [];
+    }
   }
 
   // ==========================================
@@ -379,6 +409,53 @@
     });
   }
 
+  // ★ منطق التواصل المباشر (Direct Contact Logic) ★
+  function initDirectContact(){
+    const form = $("#directContactForm");
+    if(!form) return;
+
+    form.addEventListener("submit", async(e)=>{
+      e.preventDefault();
+      
+      const btn = form.querySelector('button[type="submit"]');
+      const oldHtml = btn.innerHTML;
+      
+      // حالة التحميل
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> جارٍ الإرسال…';
+      icons();
+
+      try {
+        const formData = new FormData(form);
+        const msgData = {
+          senderName: String(formData.get("senderName")||"").trim(),
+          senderEmail: String(formData.get("senderEmail")||"").trim().toLowerCase(),
+          messageBody: String(formData.get("messageBody")||"").trim()
+        };
+
+        // التحقق البسيط
+        if(!msgData.senderEmail || !msgData.messageBody){
+           throw new Error("Fields missing");
+        }
+
+        // الحفظ في Firestore
+        await saveDirectMessage(msgData);
+
+        closeModals();
+        toast("success","وصلتنا رسالتك!","شكراً لتواصلك، سنرد عليك قريباً.");
+        form.reset();
+
+      } catch(err){
+        console.error("Contact Send Error:", err);
+        toast("error","تعذر الإرسال","تحقق من اتصالك بالإنترنت وحاول مجدداً.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = oldHtml;
+        icons();
+      }
+    });
+  }
+
   // ==========================================
   // 7. Page Initializers (Router)
   // ==========================================
@@ -404,6 +481,8 @@
       if(row)row.innerHTML=`<div class="empty rail-empty"><div class="empty-ico"><i data-lucide="wifi-off"></i></div><h3>تعذّر تحميل المشاريع</h3><p>أعد تحميل الصفحة.</p></div>`;
     }
     icons();initSuggest();initReveal();
+    // ★ تفعيل نموذج التواصل المباشر ★
+    setTimeout(initDirectContact, 100);
   }
 
   // --- Register Page ---
@@ -649,6 +728,67 @@
     return `<article class="req ${r.status}"><div class="req-top"><div class="avatar">${esc(initial(otherName))}</div><div class="req-who"><b>${esc(otherName)}</b><span>${esc(r.otherFaculty||r.fromFaculty||r.toFaculty||"")}</span></div><span class="status ${r.status}">${st}</span></div><div class="req-msg">${esc(r.message||"(بدون رسالة)")}</div>${actions}${contactSlot}</article>`;
   }
 
+  // ★ NEW: Admin Page Logic ★
+  async function initAdmin(){
+    const container = $("#messagesList");
+    if(!container) return;
+    
+    container.innerHTML = `<div class="empty"><div class="empty-ico"><i data-lucide="loader-2" class="spin"></i></div><h3>جارٍ تحميل الرسائل...</h3></div>`;
+    icons();
+
+    try {
+      // نتأكد من وجود جلسة (حتى لو مجهولة) لقراءة البيانات
+      await ensureUser();
+      const messages = await fetchAllMessages();
+      
+      if(messages.length === 0) {
+        container.innerHTML = `<div class="empty"><div class="empty-ico"><i data-lucide="inbox"></i></div><h3>لا توجد رسائل بعد</h3><p>ستظهر هنا جميع الاقتراحات ورسائل التواصل فور وصولها.</p></div>`;
+        icons();
+        return;
+      }
+
+      container.innerHTML = messages.map(msg => {
+        const isContact = msg.type === "contact_message";
+        const typeName = isContact ? "رسالة تواصل" : "اقتراح";
+        const icon = isContact ? "message-square" : "lightbulb";
+        const nameDisplay = msg.senderName || msg.name || "زائر مجهول";
+        const emailDisplay = msg.senderEmail || msg.email || "";
+        const bodyDisplay = msg.messageBody || msg.content || "(بدون نص)";
+        const dateDisplay = msg.createdAt || "";
+
+        return `
+          <div class="msg-card">
+            <div class="msg-head">
+              <div class="msg-from">
+                <span class="msg-name">${esc(nameDisplay)}</span>
+                <span class="msg-email">${esc(emailDisplay)}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="msg-type"><i data-lucide="${icon}"></i> ${typeName}</span>
+                <span class="msg-date">${dateDisplay}</span>
+              </div>
+            </div>
+            <div class="msg-body">${esc(bodyDisplay)}</div>
+            <div class="msg-actions">
+              <button type="button" class="btn btn-glass btn-sm" onclick="navigator.clipboard.writeText('${esc(emailDisplay)}');this.innerText='تم النسخ ✓';setTimeout(()=>this.innerText='نسخ البريد',2000)">
+                <i data-lucide="copy"></i> نسخ البريد
+              </button>
+              <a href="mailto:${esc(emailDisplay)}?subject=رد%20على%20رسالتك%20في%20شريك&body=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%81%D9%8A%20%D8%B4%D8%B1%D9%8A%D9%83!" class="btn btn-primary btn-sm">
+                <i data-lucide="reply"></i> رد بالإيميل
+              </a>
+            </div>
+          </div>
+        `;
+      }).join("");
+      
+      icons();
+    } catch(err) {
+      console.error("Admin Load Error:", err);
+      container.innerHTML = `<div class="empty"><div class="empty-ico"><i data-lucide="wifi-off"></i></div><h3>تعذّر تحميل الرسائل</h3><p>تحقق من اتصالك أو صلاحيات القراءة في Firestore.</p></div>`;
+      icons();
+    }
+  }
+
   // ==========================================
   // 8. Execution Router
   // ==========================================
@@ -656,5 +796,6 @@
   else if(page==="register") initRegister();
   else if(page==="search") initSearch();
   else if(page==="dashboard") initDashboard();
+  else if(page==="admin") initAdmin(); // ★ استدعاء منطق صفحة الإدارة ★
 
 })();
