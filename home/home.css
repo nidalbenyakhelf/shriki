@@ -1,8 +1,6 @@
 /* ============================================================
    شريك — أزرق ليلي موحّد | #00050d · #197fd3 · #ffffff
-   MOBILE-FIRST STRICT + Smart Centering + Smooth Gradient
-   تم إصلاح: تداخل النصوص، كسر الأزرار، حجم الإحصائيات،
-   التدرج الحاد، والتمركز العمودي حسب الجهاز.
+   MOBILE-FIRST STRICT + Smart Centering + Admin Panel Styles
    ============================================================ */
 :root{
   --bg:#00050d;
@@ -129,36 +127,36 @@ body.locked{overflow:hidden}
 .pop-menu button:hover{background:var(--lift-hv);color:var(--ink)}
 
 /* ============================================================
-   ★ Hero Section - التمرير الذكي والتدرج الناعم ★
-   الافتراضي (حاسوب): المحتوى في منتصف الشاشة عمودياً.
-   الهاتف (<768px): المحتوى ينزل للأسفل ليكون قريباً من الإبهام.
+   ★ Hero Section - الإصلاح النهائي للتمركز العمودي ★
+   نستخدم Flexbox مع justify-content:center لضمان البقاء في المنتصف التام
+   سواء كانت الشاشة طويلة أو قصيرة.
    ============================================================ */
 .hero{
   position:relative; 
-  min-height:100svh; 
+  min-height:100svh; /* ارتفاع كامل الشاشة الآمن */
   
-  /* ★ القيمة الافتراضية: تمركز في المنتصف (للحاسوب) ★ */
   display:flex; 
-  align-items:center; 
-  justify-content:center; 
+  flex-direction:column; /* ترتيب عمودي */
+  align-items:center;     /* توسيط أفقي */
+  justify-content:center; /* ★ التوسيط الرأسي القسري ★ */
   
   text-align:center; 
   overflow:hidden; 
-  padding-bottom:80px;
+  padding:80px 20px 40px; /* مسافة علوية لتجنب الناف بار، ومسافة سفلية */
 }
 
-/* ★ قاعدة خاصة بالهواتف فقط لإرجاع المحتوى للأسفل ★ */
-@media (max-width: 768px){
+/* ضبط خاص للشاشات الصغيرة جداً (الهواتف الأفقية القديمة) */
+@media (max-height: 600px){
   .hero {
-    align-items: flex-end; /* إجبار المحتوى للنزول للأسفل في الهواتف */
-    padding-bottom: 40px; /* تقليل المسافة السفلية قليلاً لتوفير مساحة أكبر للصورة */
+    padding-top: 60px;
+    padding-bottom: 20px;
   }
 }
 
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
 
-/* ★ التدرج الناعم لإزالة الخط الحاد بين الصورة والخلفية الداكنة ★ */
+/* التدرج الناعم (كما طلبت سابقاُ) */
 .hero-scrim{
   position:absolute; inset:0; z-index:1; pointer-events:none;
   background: linear-gradient(
@@ -174,11 +172,10 @@ body.locked{overflow:hidden}
 .hero-content{
   position:relative; z-index:2; 
   width:100%; max-width:600px; margin-inline:auto; 
-  padding:0 20px; 
   display:flex; flex-direction:column; align-items:center; gap:12px;
 }
 
-/* تقليل حجم العناوين لمنع كسر السطر العشوائي على الشاشات الصغيرة جداً */
+/* ... باقي قواعد hero h1 و eyebrow تبقى كما هي ... */
 .hero h1{font-size:clamp(1.8rem, 7vw, 2.5rem); line-height:1.1; margin-bottom:4px;}
 .hero-sub{font-size:.95rem; line-height:1.5; opacity:.9; max-width:45ch;}
 .eyebrow{
@@ -395,6 +392,26 @@ body.locked{overflow:hidden}
 .empty-ico svg{width:24px;height:24px}.empty h3{font-size:1rem}.empty p{max-width:36ch;color:var(--ink-2);font-size:.85rem}
 
 /* ============================================================
+   ★ NEW: Admin Panel Styles (لصفحة admin.html الخاصة بك) ★
+   ============================================================ */
+.admin-wrap{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:80px 16px 40px;gap:24px}
+.admin-header{text-align:center;max-width:600px}
+.admin-header h1{font-size:1.8rem;margin-bottom:8px}
+.admin-header p{color:var(--ink-2);font-size:.95rem}
+.messages-list{width:100%;max-width:700px;display:flex;flex-direction:column;gap:16px}
+.msg-card{background:var(--lift);border:none;border-radius:var(--r-lg);padding:20px;display:flex;flex-direction:column;gap:12px;transition:.2s var(--ease)}
+.msg-card:hover{background:var(--lift-hv)}
+.msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.msg-from{display:flex;flex-direction:column;gap:2px}
+.msg-name{font-weight:700;font-size:.95rem;color:var(--ink)}
+.msg-email{font-size:.8rem;color:var(--accent-sky);direction:ltr;text-align:right}
+.msg-date{font-size:.75rem;color:var(--ink-3)}
+.msg-type{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--r-pill);font-size:.7rem;font-weight:700;background:var(--accent-soft);color:var(--accent-sky)}
+.msg-body{background:var(--surface-2);border-radius:var(--r-sm);padding:14px;color:var(--ink-2);font-size:.9rem;line-height:1.6;word-break:break-word}
+.msg-actions{display:flex;gap:8px;margin-top:4px}
+.msg-actions .btn{flex:1;min-width:100px}
+
+/* ============================================================
    Media Queries for Larger Screens (Tablet/Desktop Enhancements)
    فقط نضيف التحسينات هنا، الأساس هو ما فوق
    ============================================================ */
@@ -420,6 +437,10 @@ body.locked{overflow:hidden}
     display:inline-flex; align-items:center; justify-content:center; gap:6px;
   }
   .navbar .btn-primary.btn-sm svg{width:16px;height:16px}
+  
+  /* تحسينات صفحة الإدارة للشاشات الأكبر */
+  .admin-wrap{padding:100px 24px 60px}
+  .messages-list{max-width:800px}
 }
 @media (min-width:900px){
   :root{--maxw:1180px;--nav-h:64px}
