@@ -27,6 +27,20 @@
 
   <section class="toolbar">
     <label class="search"><i data-lucide="search"></i><input id="q" type="text" placeholder="ابحث بكلمة…"/></label>
+    
+    <!-- ★ قائمة الفلتر الجديدة حسب النوع ★ -->
+    <div class="select">
+      <select id="fType" class="input">
+        <option value="all">كل الأنواع</option>
+        <option value="مذكرة تخرج">مذكرة تخرج</option>
+        <option value="شركة ناشئة">شركة ناشئة</option>
+        <option value="مشروع خارج الجامعة">مشروع خارج الجامعة</option>
+        <option value="مسابقة / بحث علمي">مسابقة / بحث علمي</option>
+        <option value="مبادرة خيرية">مبادرة خيرية</option>
+      </select>
+      <i data-lucide="chevron-down"></i>
+    </div>
+
     <div class="select"><select id="fFaculty" class="input"></select><i data-lucide="chevron-down"></i></div>
     <div class="select"><select id="fSort" class="input"><option value="newest">الأحدث</option><option value="oldest">الأقدم</option><option value="needed">الأكثر حاجةً</option></select><i data-lucide="chevron-down"></i></div>
   </section>
