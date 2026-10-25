@@ -209,17 +209,34 @@
   </div>
 </div>
 
+<!-- ★ MODAL: تواصل مباشر (يُرسل رسالة نصية إليك) ★ -->
 <div class="modal" id="contactModal">
   <div class="modal-card">
     <div class="modal-head"><h2><i data-lucide="message-circle"></i> تواصل معنا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-lucide="x"></i></button></div>
-    <p style="color:var(--ink-2);font-size:.9rem">لأي استفسار بخصوص المنصّة، أو اقتراح، أو تعاون — راسلنا مباشرةً.</p>
-    <div class="contact-list">
-      <div class="contact-card">
-        <span class="ci"><i data-lucide="mail"></i></span>
-        <span class="ct"><b>البريد الإلكتروني</b><a href="mailto:nidalbenyakhelf@gmail.com">nidalbenyakhelf@gmail.com</a></span>
-        <button type="button" class="icon-btn" data-copy="nidalbenyakhelf@gmail.com" aria-label="نسخ البريد"><i data-lucide="copy"></i></button>
-      </div>
-    </div>
+    
+    <!-- ★ وصف جديد يوضح أن الرسالة تصل مباشرة للمطور ★ -->
+    <p style="color:var(--ink-2);font-size:.9rem">هل لديك سؤال، اقتراح، أو تريد التعاون؟ اكتب رسالتك هنا وستصلني مباشرةً لأرد عليك.</p>
+    
+    <!-- ★ النموذج الجديد ★ -->
+    <form id="directContactForm" class="auth-form" style="gap:14px; margin-top:10px;">
+      <label class="field">
+        <span class="field-label">اسمك (اختياري)</span>
+        <input name="senderName" class="input" placeholder="مثال: أحمد"/>
+      </label>
+      
+      <label class="field">
+        <span class="field-label">بريدك الإلكتروني *</span>
+        <input name="senderEmail" type="email" class="input" required placeholder="name@example.com"/>
+        <span class="field-hint">لنتمكن من الرد عليك.</span>
+      </label>
+      
+      <label class="field">
+        <span class="field-label">رسالتك *</span>
+        <textarea name="messageBody" rows="4" class="input" required placeholder="اكتب ما يدور في ذهنك..."></textarea>
+      </label>
+      
+      <button type="submit" class="btn btn-primary btn-block"><i data-lucide="send"></i> إرسال الرسالة</button>
+    </form>
   </div>
 </div>
 
