@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="theme-color" content="#00050d"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes"/>
+<meta name="robots" content="noindex,nofollow"/> <!-- إخفاء من محركات البحث -->
+<title>لوحة التحكم — شريك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="home/home.css"/>
+<style>
+  /* تنسيقات إضافية بسيطة لهذه الصفحة فقط إذا لزم الأمر */
+  .admin-secret-banner {
+    background: var(--warn-soft); color: var(--warn); padding: 12px 20px;
+    border-radius: var(--r-md); text-align: center; font-weight: 700; font-size: .85rem;
+    margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+</style>
+</head>
+<body data-page="admin">
+
+<div class="page-bar">
+  <a href="./index.html" class="btn btn-quiet"><i data-lucide="arrow-right"></i> رجوع للرئيسية</a>
+  <div class="page-title">📬 صندوق الوارد</div>
+  <span style="width:44px"></span>
+</div>
+
+<main class="admin-wrap">
+  <div class="admin-header">
+    <div class="admin-secret-banner">
+      <i data-lucide="eye-off"></i> هذه الصفحة سرية ولا تظهر للجمهور.
+    </div>
+    <h1>مرحباً نضال 👋</h1>
+    <p>هنا تجد جميع اقتراحات الطلاب ورسائل التواصل المباشر التي وصلت للمنصة.</p>
+  </div>
+
+  <!-- الحاوية التي ستمتلئ بالرسائل ديناميكياً عبر home.js -->
+  <div class="messages-list" id="messagesList">
+    <!-- سيتم حقن المحتوى هنا بواسطة JavaScript -->
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="home/home.js"></script>
+</body>
+</html>
