@@ -54,7 +54,11 @@
       </div>
       <a href="search/search.html" class="icon-btn desk-only" aria-label="بحث"><i data-lucide="search"></i></a>
       <a href="dashboard/dashboard.html" class="icon-btn desk-only" aria-label="لوحتي"><i data-lucide="inbox"></i></a>
-      <a href="register/register.html" class="btn btn-primary btn-sm"><i data-lucide="plus"></i><span class="hide-sm">أنشئ مشروعًا</span></a>
+      <!-- ★ الزر الذكي: نص + أيقونة على الحاسوب، أيقونة فقط على الهاتف ★ -->
+      <a href="register/register.html" class="btn btn-primary btn-sm">
+        <i data-lucide="plus"></i>
+        <span class="hide-sm">أنشئ مشروعًا</span>
+      </a>
       <button class="icon-btn menu-toggle" id="menuToggle" aria-label="القائمة" aria-expanded="false"><i data-lucide="menu"></i></button>
     </div>
   </div>
@@ -145,7 +149,7 @@
         <details class="faq-item"><summary><span>لأي نوع من المشاريع تصلح المنصّة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لمذكرات التخرّج، والشركات الناشئة، والمسابقات والبحوث، وكذلك المشاريع المشتركة خارج الجامعة، وحتى المبادرات الخيرية والتطوعية. الفكرة واحدة: فريق مختلط يكمّل بعضه.</p></div></details>
         <details class="faq-item"><summary><span>ماذا أكتب في «المهارات المطلوبة»؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>التخصّصات أو الأدوار التي تنقصك: تصميم واجهات، برمجة، قانون، تسويق، تحليل بيانات، كتابة محتوى، محاسبة… كلما حدّدتها بوضوح، وصلك الأنسب.</p></div></details>
         <details class="faq-item"><summary><span>لم أجد شريكًا مناسبًا، ماذا أفعل؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>عدّل وصف مشروعك ليكون أوضح، وسّع قائمة التخصّصات المطلوبة، وراجع طلباتك الواردة دوريًا. وشارك المنصّة مع زملائك من الكليات الأخرى عبر زرّ «شارك» — فكلّما زاد العدد، زادت فرص إيجاد الشريك المثالي.</p></div></details>
-        <details class="faq-item"><summary><span>هل المنصّة مجانيّة؟ وكيف أقترح فكرة أو أُبلغ عن خطأ؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>نعم، مجانيّة بالكامل. رأيك يهمّنا لتطويرها؛ استخدم زرّ «اقترح فكرة أو تحسينًا» في الأعلى أو في نهاية الصفحة.</p></div></details>
+        <details class="faq-item"><summary><span>هل المنصّة مجانيّة؟ وكيف أقترح فكرة أو أبلغ عن خطأ؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>نعم، مجانيّة بالكامل. رأيك يهمّنا لتطويرها؛ استخدم زرّ «اقترح فكرة أو تحسينًا» في الأعلى أو في نهاية الصفحة.</p></div></details>
       </div>
     </div>
   </section>
@@ -167,7 +171,7 @@
 <footer class="footer">
   <div class="wrap footer-inner">
     <p class="footer-note">صنع بحبٍّ لطلبة جامعة يحيى فارس – المدية <i data-lucide="heart" class="heart"></i></p>
-    <p class="footer-disclaimer">«شريك» مبادرة شخصية مستقلّة من طلبة، وليست منصّة رسميّة تابعة للجامعة. لا تُمحَى بياناتك عند حذف الحساب، ولا تُشارك مع أي طرف ثالث.</p>
+    <p class="footer-disclaimer">«شريك» مبادرة شخصية مستقلّة من طلبة، وليست منصّة رسميّة تابعة للجامعة. لا تُمحَى بياناتك عند حذف الحساب، ولا تشارك مع أي طرف ثالث.</p>
     <nav class="footer-links">
       <a href="search/search.html">البحث</a>
       <a href="register/register.html">التسجيل</a>
@@ -199,7 +203,7 @@
           <option value="other">أخرى</option>
         </select><i data-lucide="chevron-down"></i></div>
       </label>
-      <label class="field"><span class="field-label">اكتب اقتراحك *</span><textarea id="sugText" class="input" rows="4" required placeholder="مثال: أتمنّى إضافة فلتر حسب الكلية في صفحة البحث…"></textarea></label>
+      <label class="field"><span class="field-label">اكتب اقتراحك *</span><textarea id="sugText" class="input" rows="4" required placeholder="مثال: أتمنى إضافة فلتر حسب الكلية في صفحة البحث…"></textarea></label>
       <button type="submit" class="btn btn-primary btn-block"><i data-lucide="send"></i> إرسال الاقتراح</button>
     </form>
   </div>
@@ -219,7 +223,7 @@
   </div>
 </div>
 
-<!-- ★ الترتيب الحرج: المكتبات أولاً ثم كود المشروع ★ -->
+<!-- ★ الترتيب الحرج: المكتبات أولا ثم كود المشروع ★ -->
 <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
