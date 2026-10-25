@@ -1,7 +1,7 @@
 /* ============================================================
    شريك — أزرق ليلي موحّد | #00050d · #197fd3 · #ffffff
    MOBILE-FIRST STRICT (الهاتف أساسًا، الكمبيوتر ثانويًا)
-   تم تحسين المسافات، الأحجام، والتمركز للشاشات < 400px
+   تم إصلاح: تداخل النصوص، كسر الأزرار، حجم الإحصائيات.
    ============================================================ */
 :root{
   --bg:#00050d;
@@ -16,7 +16,7 @@
   --info:#5cc0ff;--info-soft:rgba(92,192,255,.13);--ok:#34d399;--ok-soft:rgba(52,211,153,.13);
   --r-sm:12px;--r-md:16px;--r-lg:20px;--r-pill:999px;
   --e1:0 1px 2px rgba(0,0,0,.4);--e2:0 10px 28px rgba(0,0,0,.45);--e3:0 22px 56px rgba(0,0,0,.55);
-  --ease:cubic-bezier(.4,0,.2,1);--nav-h:60px; /* قللنا ارتفاع الرأس قليلاً للجوال */
+  --ease:cubic-bezier(.4,0,.2,1);--nav-h:60px; /* ارتفاع أقل للجوال */
   --maxw:1120px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -105,6 +105,16 @@ textarea.input{height:auto;min-height:90px;padding:12px 14px;resize:vertical;lin
 .nav-links.open{display:flex;flex-direction:column;align-items:stretch;gap:2px;position:absolute;top:var(--nav-h);inset-inline:8px;padding:8px;background:var(--bg);border:none;border-radius:var(--r-md);box-shadow:var(--e3);z-index:55}
 .nav-links.open .nav-link{justify-content:flex-start;min-height:48px;padding-block:12px;font-size:.95rem}
 
+/* ★ زر إنشاء مشروع ذكي للجوال: أيقونة فقط ★ */
+@media (max-width:600px){
+  .navbar .btn-primary.btn-sm span.hide-sm{display:none!important}
+  .navbar .btn-primary.btn-sm{
+    width:40px; height:40px; padding:0; border-radius:50%;
+    display:grid; place-items:center;
+  }
+  .navbar .btn-primary.btn-sm svg{width:20px;height:20px;margin:0}
+}
+
 /* ===== Overlay لإغلاق القوائم ===== */
 .menu-overlay{position:fixed;inset:0;z-index:45;background:transparent;display:none}
 .menu-overlay.show{display:block}
@@ -119,23 +129,39 @@ body.locked{overflow:hidden}
 .pop-menu button svg{width:16px;height:16px;color:var(--accent-sky);flex-shrink:0}
 .pop-menu button:hover{background:var(--lift-hv);color:var(--ink)}
 
-/* ===== Hero Section ===== */
-.hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;justify-content:center;text-align:center;overflow:hidden;padding:var(--nav-h) 0 0}
+/* ===== Hero Section - مُصلح للتداخل ===== */
+.hero{
+  position:relative; 
+  min-height:100svh; /* ارتفاع كامل الشاشة الآمن */
+  display:flex; 
+  align-items:flex-end; /* محاذاة المحتوى للأسفل دائمًا */
+  justify-content:center; 
+  text-align:center; 
+  overflow:hidden; 
+  padding-bottom:80px; /* مسافة آمنة أسفل الشاشة قبل الفوتر/التالي */
+}
 .hero-media{position:absolute;inset:0;z-index:0}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:brightness(.85) saturate(.9) contrast(1.05)}
-.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:
-  radial-gradient(120% 95% at 0% 55%, rgba(0,5,13,.85) 0%, rgba(0,5,13,.45) 35%, rgba(0,5,13,0) 65%),
-  linear-gradient(to bottom, rgba(0,5,13,0) 0%, rgba(0,5,13,0) 20%, rgba(0,5,13,.2) 35%, rgba(0,5,13,.5) 50%, rgba(0,5,13,.8) 70%, var(--bg) 100%)}
-.hero-content{position:relative;z-index:2;width:100%;max-width:600px;margin-inline:auto;padding:0 16px clamp(30px,6vh,80px);display:flex;flex-direction:column;align-items:center;gap:14px}
-.hero-content>*{opacity:0;transform:translateY(15px);animation:riseIn .7s var(--ease) forwards}
-.hero-content>*:nth-child(1){animation-delay:.1s}.hero-content>*:nth-child(2){animation-delay:.2s}
-.hero-content>*:nth-child(3){animation-delay:.3s}.hero-content>*:nth-child(4){animation-delay:.4s}.hero-content>*:nth-child(5){animation-delay:.5s}
-@keyframes riseIn{to{opacity:1;transform:none}}
-.eyebrow{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r-pill);background:rgba(0,5,13,.6);color:var(--accent-sky);font-size:.75rem;font-weight:700;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:center;max-width:90%}
-.eyebrow svg{width:12px;height:12px}
-.hero h1{font-size:clamp(1.8rem,8vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;text-shadow:0 2px 16px rgba(0,0,0,.6)}
-.hero h1 .hl{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-sub{font-size:clamp(.9rem,3.5vw,1.05rem);color:var(--ink-2);max-width:45ch;text-shadow:0 1px 8px rgba(0,0,0,.5);line-height:1.6}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+/* طبقة تعتيم أقوى لضمان قراءة النص حتى لو كانت الصورة فاتحة */
+.hero-scrim{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to top, rgba(0,5,13,.95) 0%, rgba(0,5,13,.7) 40%, transparent 100%);
+}
+.hero-content{
+  position:relative; z-index:2; 
+  width:100%; max-width:600px; margin-inline:auto; 
+  padding:0 20px; /* حواف جانبية مريحة للإصبع */
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+/* تقليل حجم العناوين لمنع كسر السطر العشوائي */
+.hero h1{font-size:clamp(1.8rem, 7vw, 2.5rem); line-height:1.1; margin-bottom:4px;}
+.hero-sub{font-size:.95rem; line-height:1.5; opacity:.9; max-width:45ch;}
+.eyebrow{
+  font-size:.75rem; padding:6px 12px; 
+  background:rgba(0,0,0,.4); backdrop-filter:blur(4px);
+  border-radius:20px; white-space:normal; /* يسمح للنص بالالتفاف إذا طال */
+  text-align:center; line-height:1.3;
+}
 .hero-actions{display:flex;flex-direction:column;gap:10px;margin-top:8px;width:100%;max-width:320px}
 .hero-actions .btn{width:100%}
 .privacy-note{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 12px;border-radius:var(--r-pill);background:rgba(0,5,13,.6);color:var(--ink-2);font-size:.75rem;font-weight:600;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:center}
@@ -168,7 +194,7 @@ body.locked{overflow:hidden}
 .pm-needs{font-size:.7rem;color:var(--ink-3);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .rail-empty{margin:0 16px}
 
-/* ===== Trust Stats (الأرقام الإحصائية) - مُصلح للجوال ===== */
+/* ===== Trust Stats (الأرقام الإحصائية) - مٌصلح للجوال ===== */
 .trust{padding:24px 0}
 .trust-row{
   display:flex; 
@@ -384,6 +410,14 @@ body.locked{overflow:hidden}
   .trust-num{font-size:1.8rem}
   .trust-label{font-size:.75rem;max-width:none}
   .grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  
+  /* استعادة زر النص الكامل على الحاسوب */
+  .navbar .btn-primary.btn-sm span.hide-sm{display:inline!important}
+  .navbar .btn-primary.btn-sm{
+    width:auto; height:40px; padding:0 14px; border-radius:var(--r-sm);
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .navbar .btn-primary.btn-sm svg{width:16px;height:16px}
 }
 @media (min-width:900px){
   :root{--maxw:1180px;--nav-h:64px}
