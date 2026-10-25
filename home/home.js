@@ -162,7 +162,7 @@
     const safeContact = {
       email: cleanStr(contactData.email, 120).toLowerCase(),
       phone: cleanStr(contactData.phone, 20),
-      linkedin: cleanStr(contactData.linkedin, 200)
+      linkedin: cleanStr(contactData.linkedin, 200) // ← الاسم بقي linkedin للتوافق مع DB، لكن الواجهة تقبل أي رابط
     };
     
     await db.runTransaction(async(tx)=>{
@@ -465,7 +465,13 @@
     const urlTab=new URLSearchParams(location.search).get("tab");
     setTab(urlTab==="partners"?"partners":"teams");
     $$("#searchTabs .seg-btn").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
-    ["#q","#fFaculty","#fSort"].forEach(s=>{const el=$(s);el.addEventListener(el.tagName==="INPUT"?"input":"change",render)});
+    
+    // ★ أضفنا #fType إلى مصفوفة الحقول المستمعة للتغيير ★
+    ["#q","#fFaculty","#fSort","#fType"].forEach(s=>{
+      const el=$(s);
+      if(el) el.addEventListener(el.tagName==="INPUT"?"input":"change",render)
+    });
+    
     $("#sendReq").addEventListener("click",sendRequest);
     document.addEventListener("click",e=>{
       const b=e.target.closest("[data-req]");if(!b)return;
@@ -487,6 +493,9 @@
   function setTab(t){
     tab=t;specFilter="all";
     $("#q").value="";$("#fFaculty").value="all";$("#fSort").value="newest";
+    // ★ تصفير فلتر النوع عند تبديل التبويب ★
+    if($("#fType")) $("#fType").value="all"; 
+    
     $$("#searchTabs .seg-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));
     load();
   }
@@ -497,26 +506,45 @@
     box.innerHTML=`<button type="button" class="spec-chip ${specFilter==="all"?"active":""}" data-spec="all">الكل</button>`+all.map(f=>`<button type="button" class="spec-chip ${specFilter===f?"active":""}" data-spec="${esc(f)}">${esc(f)}</button>`).join("");
     box.querySelectorAll(".spec-chip").forEach(c=>c.addEventListener("click",()=>{specFilter=c.dataset.spec;box.querySelectorAll(".spec-chip").forEach(x=>x.classList.toggle("active",x===c));render()}));
   }
+  
+  // ★ دالة الفلترة المحدثة لتشمل فلتر النوع ★
   function getList(){
-    const q=$("#q").value.trim().toLowerCase(),fac=$("#fFaculty").value,sort=$("#fSort").value;
+    const q=$("#q").value.trim().toLowerCase();
+    const fac=$("#fFaculty").value;
+    const sort=$("#fSort").value;
+    const typeFilter = $("#fType") ? $("#fType").value : "all"; // ★ قراءة الفلتر الجديد ★
+
     let list=cache.filter(a=>{
+      // فلترة الكلية
       const okF=fac==="all"||a.faculty===fac;
+      
+      // ★ فلترة النوع (الجديدة) ★
+      const okT=typeFilter==="all" || a.projectType === typeFilter;
+
+      // فلترة التخصصات الفرعية (chips)
       const okS=specFilter==="all"||(tab==="teams"?(a.neededSpecialties||[]).includes(specFilter):a.specialty===specFilter);
+      
+      // البحث النصي
       const hay=[a.name,a.title,a.description,a.specialty,(a.skills||[]).join(" "),(a.neededSpecialties||[]).join(" "),a.faculty].join(" ").toLowerCase();
-      return okF&&okS&&(!q||hay.includes(q));
+      
+      // الشرط المجمّع: يجب تحقيق كل الشروط
+      return okF && okT && okS && (!q||hay.includes(q)); 
     });
+    
     if(sort==="oldest")list=[...list].reverse();
     if(sort==="needed"&&tab==="teams")list=[...list].sort((a,b)=>(b.neededSpecialties||[]).length-(a.neededSpecialties||[]).length);
     return list;
   }
+  
   function render(){
     const list=getList(),g=$("#results");
     // ★ رابط نسبي من search/ إلى register/ ★
     g.innerHTML=list.length?list.map(a=>tab==="teams"?teamCardSearch(a):partnerCardSearch(a)).join(""):
-      `<div class="empty"><div class="empty-ico"><i data-lucide="folder-search"></i></div><h3>لم نعثر على نتائج</h3><p>غيّر عوامل التصفية، أو سجّل لتُنشر بياناتك هنا.</p><a href="../register/register.html?kind=${tab==="teams"?"team":"student"}" class="btn btn-primary btn-sm"><i data-lucide="plus"></i> سجّل</a></div>`;
+      `<div class="empty"><div class="empty-ico"><i data-lucide="folder-search"></i></div><h3>لم نعثر على نتائج</h3><p>غيّر عوامل التصفية، أو سجّل لتنشر بياناتك هنا.</p><a href="../register/register.html?kind=${tab==="teams"?"team":"student"}" class="btn btn-primary btn-sm"><i data-lucide="plus"></i> سجّل</a></div>`;
     $("#count").textContent=list.length?`${list.length} نتيجة`:"";
     icons();
   }
+  
   async function sendRequest(){
     const msg=$("#reqMsg").value.trim();
     if(!msg)return toast("error","أدخل رسالة","عرّف بتخصّصك وما يمكنك تقديمه.");
@@ -597,7 +625,7 @@
   }
   function renderList(list){
     const el=$("#reqList");
-    if(!list.length){el.innerHTML=`<div class="empty"><div class="empty-ico"><i data-lucide="${dashTab==="incoming"?"inbox":"send"}"></i></div><h3>${dashTab==="incoming"?"لم يصلك طلب بعد":"لم تُرسل طلبًا بعد"}</h3><p>${dashTab==="incoming"?"عندما يطلب أحدهم الانضمام إلى مشروعك، يظهر هنا.":"اذهب إلى صفحة البحث وأرسل طلبك الأول."}</p></div>`;icons();return}
+    if(!list.length){el.innerHTML=`<div class="empty"><div class="empty-ico"><i data-lucide="${dashTab==="incoming"?"inbox":"send"}"></i></div><h3>${dashTab==="incoming"?"لم يصلك طلب بعد":"لم ترسل طلبًا بعد"}</h3><p>${dashTab==="incoming"?"عندما يطلب أحدهم الانضمام إلى مشروعك، يظهر هنا.":"اذهب إلى صفحة البحث وأرسل طلبك الأول."}</p></div>`;icons();return}
     el.innerHTML=list.map(reqCard).join("");icons();
     list.filter(r=>r.status==="accepted").forEach(async r=>{
       const otherUid=dashTab==="incoming"?r.fromUid:r.toUid;
@@ -608,7 +636,7 @@
       slot.innerHTML=`<div class="ok-note"><i data-lucide="shield-check"></i> قُبل الطلب — التواصل الآن ظاهر.</div>
         ${c.email?`<div class="contact-row"><i data-lucide="mail"></i><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></div>`:""}
         ${c.phone?`<div class="contact-row"><i data-lucide="phone"></i><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>`:""}
-        ${c.linkedin?`<div class="contact-row"><i data-lucide="linkedin"></i><a href="${esc(c.linkedin)}" target="_blank" rel="noopener">${esc(c.linkedin)}</a></div>`:""}`;
+        ${c.linkedin?`<div class="contact-row"><i data-lucide="link"></i><a href="${esc(c.linkedin)}" target="_blank" rel="noopener">${esc(c.linkedin)}</a></div>`:""}`;
       icons();
     });
   }
