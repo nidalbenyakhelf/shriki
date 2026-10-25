@@ -7,40 +7,89 @@
 <title>لوحتي — شريك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<!-- ★ مسار نسبي للـ CSS ★ -->
 <link rel="stylesheet" href="../home/home.css"/>
 </head>
 <body data-page="dashboard">
 
 <div class="page-bar">
+  <!-- ★ رابط رجوع نسبي ★ -->
   <a href="../index.html" class="btn btn-quiet"><i data-lucide="arrow-right"></i> رجوع</a>
   <div class="page-title">لوحتي</div>
+  <!-- ★ رابط بحث نسبي ★ -->
   <a href="../search/search.html" class="icon-btn" aria-label="بحث"><i data-lucide="search"></i></a>
 </div>
 
 <main class="wrap narrow dash-main">
+  
+  <!-- قسم البوابة (يظهر إذا لم يكن هناك جلسة أو ملف) -->
   <section id="gate">
-    <div class="sec-head"><h2 id="gateTitle">جارٍ التحميل…</h2><p id="gateText">نتحقّق من جلستك.</p></div>
+    <div class="sec-head">
+      <h2 id="gateTitle">جارٍ التحقق...</h2>
+      <p id="gateText">نتحقق من جلستك وملفك الشخصي.</p>
+    </div>
     <div class="gate-card">
-      <button id="gateBtn" type="button" class="btn btn-primary btn-block"><i data-lucide="user-plus"></i> أنشئ ملفّي</button>
+      <button id="gateBtn" type="button" class="btn btn-primary btn-block">
+        <i data-lucide="user-plus"></i> أنشئ ملفّي
+      </button>
       <p class="tiny" id="gateHint"></p>
     </div>
   </section>
 
+  <!-- قسم اللوحة الرئيسي (يظهر بعد نجاح التحقق) -->
   <section id="panel" hidden>
-    <div class="dash-head" id="dashHead"></div>
-    <div class="seg" id="dashTabs" style="margin-bottom:18px">
-      <button type="button" class="seg-btn active" data-d="incoming"><i data-lucide="inbox"></i> واردة <span class="badge" id="bIn"></span></button>
-      <button type="button" class="seg-btn" data-d="outgoing"><i data-lucide="send"></i> صادرة <span class="badge" id="bOut"></span></button>
+    
+    <!-- رأس اللوحة: الصورة الرمزية، الاسم، الرمز العام -->
+    <div class="dash-head" id="dashHead">
+      <!-- سيتم حقن المحتوى هنا عبر JavaScript -->
     </div>
-    <div class="req-list" id="reqList"></div>
-    <div style="margin-top:24px;text-align:center"><button id="switchAcc" type="button" class="btn btn-quiet"><i data-lucide="log-out"></i> إنهاء الجلسة على هذا الجهاز</button></div>
+
+    <!-- تبويبات الطلبات (واردة / صادرة) -->
+    <div class="seg" id="dashTabs" style="margin-bottom:18px">
+      <button type="button" class="seg-btn active" data-d="incoming">
+        <i data-lucide="inbox"></i> واردة <span class="badge" id="bIn"></span>
+      </button>
+      <button type="button" class="seg-btn" data-d="outgoing">
+        <i data-lucide="send"></i> صادرة <span class="badge" id="bOut"></span>
+      </button>
+    </div>
+
+    <!-- قائمة الطلبات -->
+    <div class="req-list" id="reqList">
+      <!-- سيتم حقن البطاقات هنا عبر JavaScript -->
+      <div class="empty">
+        <div class="empty-ico"><i data-lucide="loader-2" class="spin"></i></div>
+        <h3>جارٍ تحميل الطلبات...</h3>
+      </div>
+    </div>
+
+    <!-- إجراءات إضافية أسفل اللوحة -->
+    <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;align-items:center;">
+      
+      <!-- زر إنهاء الجلسة (تبديل الحساب) -->
+      <button id="switchAcc" type="button" class="btn btn-quiet">
+        <i data-lucide="log-out"></i> إنهاء الجلسة على هذا الجهاز
+      </button>
+
+      <!-- ★ الزر الجديد: حذف العرض/الملف الشخصي ★ -->
+      <button id="deleteProfileBtn" type="button" class="btn btn-glass" style="color:var(--danger); border:1px solid var(--danger-soft);">
+        <i data-lucide="trash-2"></i> حذف عرضي / ملفي نهائياً
+      </button>
+      <p class="tiny" style="color:var(--ink-4); max-width:300px; text-align:center;">
+        ⚠️ تحذير: هذا الإجراء لا يمكن التراجع عنه. سيختفي مشروعك أو ملفك من البحث ولن تصلك طلبات جديدة.
+      </p>
+    </div>
+
   </section>
 </main>
 
+<!-- ★ ترتيب المكتبات الحرج ★ -->
 <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- ★ كود المشروع الموحد ★ -->
 <script src="../home/home.js"></script>
 </body>
 </html>
