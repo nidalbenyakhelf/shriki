@@ -26,7 +26,6 @@
 <header class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="./" class="brand">
-      <!-- ★ ضع لوجوك في assets/logo.png (PNG شفاف أو SVG). وإن لم يوجد، تظهر الأيقونة تلقائيًا ★ -->
       <span class="brand-mark has-logo" id="brandMark">
         <img src="assets/logo.png" alt="شريك" onerror="this.closest('.brand-mark').classList.remove('has-logo')">
         <i data-lucide="users"></i>
@@ -68,7 +67,7 @@
     <div class="hero-content">
       <span class="eyebrow"><i data-lucide="graduation-cap"></i> مبادرةٌ من طلبة · جامعة يحيى فارس – المدية</span>
       <h1>من الفكرة إلى <span class="hl">الفريق</span></h1>
-      <p class="hero-sub">تجمع «شريك» طلبة التخصّصات المختلفة لتكوين فرق متكاملة لمشاريع التخرّج والشركات الناشئة والمبادرات. انشر ما تحتاجه، ويصلك من يٌكمل الصورة — بموافقتك أنت.</p>
+      <p class="hero-sub">تجمع «شريك» طلبة التخصّصات المختلفة لتكوين فرق متكاملة لمشاريع التخرّج والشركات الناشئة والمبادرات. انشر ما تحتاجه، ويصلك من يُكمل الصورة — بموافقتك أنت.</p>
       <div class="hero-actions">
         <a href="register/register.html?kind=team" class="btn btn-primary"><i data-lucide="rocket"></i> أنشئ مشروعًا</a>
         <a href="search/search.html" class="btn btn-glass"><i data-lucide="search"></i> استكشف الفرق</a>
@@ -79,7 +78,7 @@
 
   <section class="rail reveal" id="rail">
     <div class="rail-head">
-      <div><h2>مشاريع تبحث عن أعضاء</h2><p>اسحب جانبيًا لاستكشاف أحدث ما نٌشر.</p></div>
+      <div><h2>مشاريع تبحث عن أعضاء</h2><p>اسحب جانبيًا لاستكشاف أحدث ما نُشر.</p></div>
       <a href="search/search.html?tab=teams" class="rail-more">عرض الكل <i data-lucide="arrow-left"></i></a>
     </div>
     <div class="poster-row" id="teamsRow"></div>
@@ -103,11 +102,12 @@
       <div class="steps-grid">
         <article class="step"><div class="step-icon"><i data-lucide="file-plus-2"></i></div><h3>انشر مشروعك</h3><p>اكتب الفكرة، ونوع المشروع، والكليات أو المهارات التي تنقصك.</p></article>
         <article class="step"><div class="step-icon"><i data-lucide="user-search"></i></div><h3>يصلك من يُكملك</h3><p>يطّلع الطلبة من التخصّصات الأخرى على مشروعك ويرسلون طلب انضمام.</p></article>
-        <article class="step"><div class="step-icon"><i data-lucide="handshake"></i></div><h3>كوِّني الفريق بثقة</h3><p>اقبل الطلبات المناسبة، وابدأ التواصل فقط مع من تختاره.</p></article>
+        <article class="step"><div class="step-icon"><i data-lucide="handshake"></i></div><h3>كوّن الفريق بثقة</h3><p>اقبل الطلبات المناسبة، وابدأ التواصل فقط مع من تختاره.</p></article>
       </div>
     </div>
   </section>
 
+  <!-- ★ قسم الأهداف — مع إضافة بطاقة "مبادرة خيرية" ★ -->
   <section class="goals reveal" id="goals">
     <div class="wrap">
       <div class="sec-head"><h2>لأي نوع من الفرق تصلح؟</h2><p>ليست «شريك» مقتصرة على مذكرات التخرج، بل تصلح لأي فريق يحتاج تخصّصات متكاملة.</p></div>
@@ -116,6 +116,8 @@
         <article class="goal-card"><div class="goal-icon"><i data-lucide="rocket"></i></div><h3>شركة ناشئة</h3><p>من فكرة إلى نموذج أولي، نحو علامة مشروع مبتكر.</p></article>
         <article class="goal-card"><div class="goal-icon"><i data-lucide="lightbulb"></i></div><h3>مشروع خارج الجامعة</h3><p>مبادرة، أو منتج، أو خدمة بين طلبة من تخصّصات مختلفة.</p></article>
         <article class="goal-card"><div class="goal-icon"><i data-lucide="trophy"></i></div><h3>مسابقة أو بحث</h3><p>فريق سريع ومحدّد المهمة لمسابقة أو بحث علمي.</p></article>
+        <!-- ★ البطاقة الجديدة ★ -->
+        <article class="goal-card"><div class="goal-icon"><i data-lucide="heart-handshake"></i></div><h3>مبادرة خيرية</h3><p>تنظيم حملات تطوعية، جمع تبرعات، أو دعم مجتمع محلي بتعاون بين التخصصات.</p></article>
       </div>
     </div>
   </section>
@@ -139,8 +141,8 @@
       <div class="faq">
         <details class="faq-item"><summary><span>هل هذه منصّة رسمية تابعة للجامعة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لا. «شريك» مبادرة شخصية مستقلّة من طلبة، وليست جهة رسميّة ولا تتبع إدارة الجامعة. أُطلقَت لحلّ مشكلة واجهها الطلبة في تكوين الفرق.</p></div></details>
         <details class="faq-item"><summary><span>لماذا لا أنشئ حسابًا بكلمة مرور؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لأن أبسط طريق ممكن هو الأفضل: تحصل على رمز عامٍّ (<code>SHRK-XXXX</code>) يُستعمل للبحث والتواصل، وبلا تسجيل معقّد. الرمز ليس كلمة مرور ولا يفتح حسابك.</p></div></details>
-        <details class="faq-item"><summary><span>كيف أحمي بياناتي؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>بريدك وهاتفك مخفيّان تمامًّا، ولا يظهران للطرف الآخر إلا بعد أن تقبل أنت طلبه من لوحتك. لا مراسلة عشوائية ولا إزعاج.</p></div></details>
-        <details class="faq-item"><summary><span>لأي نوع من المشاريع تصلح المنصّة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لمذكرات التخرّج، والشركات الناشئة، والمسابقات والبحوث، وكذلك المشاريع المشتركة خارج الجامعة. الفكرة واحدة: فريق مختلط يكمّل بعضه.</p></div></details>
+        <details class="faq-item"><summary><span>كيف أحمي بياناتي؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>بريدك وهاتفك مخفيّان تمامًا، ولا يظهران للطرف الآخر إلا بعد أن تقبل أنت طلبه من لوحتك. لا مراسلة عشوائية ولا إزعاج.</p></div></details>
+        <details class="faq-item"><summary><span>لأي نوع من المشاريع تصلح المنصّة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لمذكرات التخرّج، والشركات الناشئة، والمسابقات والبحوث، وكذلك المشاريع المشتركة خارج الجامعة، وحتى المبادرات الخيرية والتطوعية. الفكرة واحدة: فريق مختلط يكمّل بعضه.</p></div></details>
         <details class="faq-item"><summary><span>ماذا أكتب في «المهارات المطلوبة»؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>التخصّصات أو الأدوار التي تنقصك: تصميم واجهات، برمجة، قانون، تسويق، تحليل بيانات، كتابة محتوى، محاسبة… كلما حدّدتها بوضوح، وصلك الأنسب.</p></div></details>
         <details class="faq-item"><summary><span>لم أجد شريكًا مناسبًا، ماذا أفعل؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>عدّل وصف مشروعك ليكون أوضح، وسّع قائمة التخصّصات المطلوبة، وراجع طلباتك الواردة دوريًا. وشارك المنصّة مع زملائك من الكليات الأخرى عبر زرّ «شارك» — فكلّما زاد العدد، زادت فرص إيجاد الشريك المثالي.</p></div></details>
         <details class="faq-item"><summary><span>هل المنصّة مجانيّة؟ وكيف أقترح فكرة أو أُبلغ عن خطأ؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>نعم، مجانيّة بالكامل. رأيك يهمّنا لتطويرها؛ استخدم زرّ «اقترح فكرة أو تحسينًا» في الأعلى أو في نهاية الصفحة.</p></div></details>
@@ -208,7 +210,6 @@
     <div class="modal-head"><h2><i data-lucide="message-circle"></i> تواصل معنا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-lucide="x"></i></button></div>
     <p style="color:var(--ink-2);font-size:.9rem">لأي استفسار بخصوص المنصّة، أو اقتراح، أو تعاون — راسلنا مباشرةً.</p>
     <div class="contact-list">
-      <!-- ★★ غيّر هذه القيم إلى بياناتك الحقيقية قبل الإطلاق ★★ -->
       <div class="contact-card">
         <span class="ci"><i data-lucide="mail"></i></span>
         <span class="ct"><b>البريد الإلكتروني</b><a href="mailto:nidalbenyakhelf@gmail.com">nidalbenyakhelf@gmail.com</a></span>
