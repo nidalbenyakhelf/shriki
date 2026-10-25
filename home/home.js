@@ -1,8 +1,11 @@
 /* ============================================================
-   شريك — الملف الموحد (All-in-One Bundle)
+   شريك — الملف الموحد (All-in-One Bundle) - الإصدار النهائي المُصلح
    يتضمن: Firebase Setup + Utils + Constants + Store + UI Logic
            + Direct Contact Logic + Admin Panel Logic
-   مسارات نسبية تعمل على GitHub Pages / Vercel بدون تعقيدات.
+   
+   ★ الإصلاحات الأخيرة ★
+   1. dailySentCount: استبدال .count() بـ .get().size لدعم نسخة Compat.
+   2. initDashboard: استخدام onAuthStateChanged لحل مشكلة فقدان الجلسة المؤقتة.
    ============================================================ */
 
 (function() {
@@ -174,10 +177,23 @@
   }
 
   const DAILY_LIMIT = 5;
+  
+  // ★ الإصلاح: حساب العدد يدوياً لتجنب خطأ .count() في نسخة Compat ★
   async function dailySentCount(uid) {
-    const since = new Date(Date.now() - 86400000);
-    const snap = await db.collection(COL_R).where("fromUid","==",uid).where("createdAt",">=",since).count().get();
-    return snap.data().count;
+    const since = new Date(Date.now() - 86400000); // منذ 24 ساعة
+    
+    try {
+      // نجلب الوثائق الفعلية بدلاً من العد فقط
+      const snap = await db.collection(COL_R)
+        .where("fromUid", "==", uid)
+        .where("createdAt", ">=", firebase.firestore.Timestamp.fromDate(since)) // تحويل التاريخ لـ Timestamp
+        .get();
+      
+      return snap.size; // نعيد عدد الوثائق الموجودة
+    } catch(err) {
+      console.error("Daily Count Error:", err);
+      return 0; // في حال الخطأ، نعتبر أن العدد صفر للسماح بالإرسال (أو يمكنك إرجاع رقم عالٍ لمنع الإرسال)
+    }
   }
 
   async function createRequest({ toCode, type, message }) {
@@ -646,14 +662,55 @@
   }
 
   // --- Dashboard Page ---
+  // ★ الإصلاح: استخدام onAuthStateChanged لضمان استقرار الجلسة ★
   async function initDashboard(){
-    uid=getSession();               
-    if(!uid){showNoSession();bindSwitch();return}
-    const doc=await myProfile(uid);
-    if(!doc){showNoProfile();bindSwitch();return}
-    me=doc;
-    $("#gate").hidden=true;$("#panel").hidden=false;
-    renderHead();bindTabs();bindSwitch();await refresh();
+    const gateEl = $("#gate");
+    const panelEl = $("#panel");
+    
+    // 1. أظهر حالة التحميل أولاً
+    if(gateEl) {
+        gateEl.hidden = false;
+        $("#gateTitle").textContent = "جارٍ التحقق من جلستك...";
+        $("#gateText").textContent = "لحظات قليلة.";
+    }
+    if(panelEl) panelEl.hidden = true;
+
+    // 2. انتظر حتى يستقر وضع المصادقة (Authentication State)
+    auth.onAuthStateChanged(async(user) => {
+        if (!user) {
+            // لا يوجد مستخدم -> اطلب تسجيل الدخول
+            showNoSession();
+            bindSwitch();
+            return;
+        }
+
+        // يوجد مستخدم -> جرب جلب ملفه الشخصي
+        try {
+            const doc = await myProfile(user.uid);
+            
+            if(!doc) {
+                // المستخدم موجود لكن ليس لديه ملف تعريف (ربما حذفه أو فشل الإنشاء)
+                showNoProfile();
+                bindSwitch();
+            } else {
+                // كل شيء سليم -> اعرض اللوحة
+                me = doc;
+                uid = user.uid;
+                
+                if(gateEl) gateEl.hidden = true;
+                if(panelEl) panelEl.hidden = false;
+                
+                renderHead();
+                bindTabs();
+                bindSwitch();
+                await refresh();
+            }
+        } catch(err) {
+            console.error("Dashboard Load Error:", err);
+            showNoSession(); // في حال الخطأ التقني، نعود لشاشة البداية بأمان
+            bindSwitch();
+        }
+    });
   }
   let me=null,uid=null,dashTab="incoming";
   function showNoSession(){
@@ -795,7 +852,7 @@
   if(page==="home") initHome();
   else if(page==="register") initRegister();
   else if(page==="search") initSearch();
-  else if(page==="dashboard") initDashboard();
-  else if(page==="admin") initAdmin(); // ★ استدعاء منطق صفحة الإدارة ★
+  else if(page==="dashboard") initDashboard(); // ★ استدعاء المنطق المُصلح ★
+  else if(page==="admin") initAdmin(); 
 
 })();
