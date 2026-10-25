@@ -1,8 +1,9 @@
 /* ============================================================
-   شريك — الإصدار النهائي المستقر (Stable Release v2)
-   - إصلاح حاسم لمشكلة اختفاء الأيقونات (Lucide Re-render).
-   - إصلاح مشكلة فقدان الجلسة في "لوحتي" (Wait for Auth).
-   - إضافة إمكانية حذف العرض/الملف الشخصي.
+   شريك — الإصدار النهائي المستقر (Stable Release v3 - No External Icons)
+   - إزالة الاعتماد على مكتبة Lucide تماماً لمنع أخطاء الحظر.
+   - استخدام نظام الأيقونات الاحتياطي (CSS Emojis).
+   - إصلاح مشكلة فقدان الجلسة في "لوحتي".
+   - إصلاح إرسال الطلبات (Compat mode fix).
    ============================================================ */
 
 (function() {
@@ -39,12 +40,12 @@
   const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   const initial = t => (String(t || "").trim().charAt(0) || "؟");
   
-  // ★ الإصلاح الحاسم: دالة رسم الأيقونات ★
-  // يجب استدعاؤها بعد كل innerHTML لتظهر الأيقونات
+  // ★ الإصلاح الحاسم: دالة icons أصبحت فارغة أو مجرد تأكيد بسيط ★
+  // لأن الأيقونات الآن تُرسم عبر CSS (::before)، لا نحتاج لمكتبة JS.
+  // هذه الدالة موجودة فقط للتوافق مع الكود القديم، لكنها لن تفعل شيئاً ضاراً.
   const icons = () => {
-    if (typeof window.lucide !== 'undefined') {
-      try { window.lucide.createIcons(); } catch(e) { console.warn("Icon Error", e); }
-    }
+    // لا نفعل شيئاً هنا، لأن CSS يتولى الأمر.
+    // إذا أردت إضافة تأثيرات حركية بسيطة لاحقاً، يمكنك وضعها هنا.
   };
   
   const ALPHA = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
@@ -180,9 +181,10 @@
     if(!c) { c=document.createElement("div"); c.id="toastContainer"; c.className="toast-container"; document.body.appendChild(c); }
     const ic={success:"check-circle-2",error:"x-circle",warning:"alert-triangle",info:"info"};
     const t=document.createElement("div"); t.className=`toast toast-${type}`;
+    // نستخدم نفس أسماء data-lucide لأن CSS سيتعامل معها كـ Emojis
     t.innerHTML=`<div class="toast-icon"><i data-lucide="${ic[type]}"></i></div><div class="toast-content"><div class="toast-title">${esc(title)}</div><div class="toast-message">${esc(msg)}</div></div>`;
     c.appendChild(t); 
-    icons(); // ★ رسم أيقونة التوست فوراُ ★
+    icons(); // استدعاء آمن (فارغ حالياً)
     setTimeout(()=>t.remove(), 4000);
   }
 
@@ -215,7 +217,7 @@
           </div>
         `).join("") : `<div class="empty rail-empty"><h3>لا مشاريع بعد</h3></div>`;
       } catch(e) { console.error(e); }
-      icons(); // ★ رسم أيقونات البطاقات ★
+      icons(); 
     }
     
     // Suggest Form
@@ -265,7 +267,7 @@
         $("#resultCode").textContent = res.code;
         $("#copyCode").setAttribute("data-copy", res.code);
         form.hidden = true; $("#successState").hidden = false;
-        icons(); // ★ رسم أيقونات حالة النجاح ★
+        icons(); 
         toast("success","تم النشر!", `رمزك: ${res.code}`);
       } catch(err) {
         console.error(err);
@@ -311,7 +313,7 @@
           </article>
         `;
       }).join("");
-      icons(); // ★ رسم أيقونات نتائج البحث ★
+      icons(); 
     }
 
     tabs.forEach(b => b.onclick = () => {
@@ -354,7 +356,7 @@
     gate.hidden = false; panel.hidden = true;
     $("#gateTitle").textContent = "جارٍ التحقق...";
     $("#gateText").textContent = "لحظات.";
-    icons(); // ★ رسم أيقونة التحميل ★
+    icons(); 
 
     // CRITICAL FIX: Wait for auth state to settle
     const user = await waitForAuth();
@@ -383,7 +385,7 @@
     $("#gateText").textContent="أنشئ ملفك لتبدأ.";
     $("#gateBtn").innerHTML='<i data-lucide="user-plus"></i> أنشئ ملفّي';
     $("#gateBtn").onclick=()=>location.href="../register/register.html";
-    icons(); // ★ رسم أيقونة الزر ★
+    icons(); 
   }
   function showNoProfile() {
     $("#gate").hidden=false; $("#panel").hidden=true;
@@ -391,7 +393,7 @@
     $("#gateText").textContent="وُجدت جلسة لكن لا ملف.";
     $("#gateBtn").innerHTML='<i data-lucide="square-pen"></i> أنشئ ملفّي';
     $("#gateBtn").onclick=()=>location.href="../register/register.html";
-    icons(); // ★ رسم أيقونة الزر ★
+    icons(); 
   }
 
   function renderDashHead(p) {
@@ -403,7 +405,7 @@
       </div>
       <button class="dash-code" data-copy="${esc(p.code)}"><i data-lucide="hash"></i> ${esc(p.code)}</button>
     `;
-    icons(); // ★ رسم أيقونات رأس اللوحة ★
+    icons(); 
   }
 
   function bindDashActions(uid) {
@@ -466,7 +468,7 @@
   async function refreshDashLists(uid, tab="incoming") {
     const listEl = $("#reqList");
     listEl.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
-    icons(); // ★ رسم أيقونة التحميل ★
+    icons(); 
     
     const reqs = await getMyRequests(tab);
     
@@ -496,7 +498,7 @@
         </article>
       `;
     }).join("");
-    icons(); // ★ رسم أيقونات قائمة الطلبات ★
+    icons(); 
   }
 
   // --- ADMIN PAGE ---
@@ -504,7 +506,7 @@
     const container = $("#messagesList");
     if(!container) return;
     container.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
-    icons(); // ★ رسم أيقونة التحميل ★
+    icons(); 
     
     await ensureUser(); // Ensure we have an ID to pass security rules
     const snap = await db.collection(COL_S).orderBy("createdAt","desc").limit(100).get();
@@ -530,7 +532,7 @@
         </div>
       `;
     }).join("");
-    icons(); // ★ رسم أيقونات الرسائل ★
+    icons(); 
   }
 
   // Router
