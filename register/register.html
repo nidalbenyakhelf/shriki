@@ -7,25 +7,27 @@
 <title>أنشئ مشروعك — شريك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<!-- ★ استبدال Lucide بـ Font Awesome ★ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="../home/home.css"/>
 </head>
 <body data-page="register">
 
 <div class="page-bar">
-  <a href="../index.html" class="btn btn-quiet"><i data-lucide="arrow-right"></i> رجوع</a>
+  <a href="../index.html" class="btn btn-quiet"><i data-fa-icon="arrow-right"></i> رجوع</a>
   <div class="page-title">أنشئ مشروعك</div>
   <span style="width:44px"></span>
 </div>
 
 <main class="auth-wrap">
   <div class="auth-card">
-    <div class="logo-icon"><i data-lucide="rocket"></i></div>
+    <div class="logo-icon"><i data-fa-icon="rocket"></i></div>
     <h1>من الفكرة إلى الفريق</h1>
     <p class="auth-sub">اختر: ألديك مشروع تحتاج فريقًا، أم ترغب في الانضمام كشريك؟ لن يستغرق الأمر دقيقة.</p>
 
     <div class="seg" id="kindTabs" style="margin-bottom:24px">
-      <button type="button" class="seg-btn active" data-kind="team"><i data-lucide="rocket"></i> عندي مشروع</button>
-      <button type="button" class="seg-btn" data-kind="student"><i data-lucide="user"></i> أرغب في أن أكون شريكًا</button>
+      <button type="button" class="seg-btn active" data-kind="team"><i data-fa-icon="rocket"></i> عندي مشروع</button>
+      <button type="button" class="seg-btn" data-kind="student"><i data-fa-icon="user"></i> أرغب في أن أكون شريكًا</button>
     </div>
 
     <form id="registerForm" class="auth-form">
@@ -34,16 +36,16 @@
       <div class="pane">
         <label class="field"><span class="field-label">اسمك أو اسم فريقك</span><input name="name" class="input" required placeholder="مثال: محمد، أو فريق نور"/></label>
         <div class="field-row">
-          <label class="field"><span class="field-label">كليّتك</span><div class="select"><select name="faculty" id="facSelect" class="input" required></select><i data-lucide="chevron-down"></i></div></label>
-          <label class="field"><span class="field-label">القطب / الحرم (اختياري)</span><div class="select"><select name="campus" id="campusSelect" class="input"></select><i data-lucide="chevron-down"></i></div></label>
+          <label class="field"><span class="field-label">كليّتك</span><div class="select"><select name="faculty" id="facSelect" class="input" required></select><i data-fa-icon="chevron-down"></i></div></label>
+          <label class="field"><span class="field-label">القطب / الحرم (اختياري)</span><div class="select"><select name="campus" id="campusSelect" class="input"></select><i data-fa-icon="chevron-down"></i></div></label>
         </div>
-        <label class="field"><span class="field-label">سنتك</span><div class="select"><select name="year" id="yearSelect" class="input" required></select><i data-lucide="chevron-down"></i></div></label>
+        <label class="field"><span class="field-label">سنتك</span><div class="select"><select name="year" id="yearSelect" class="input" required></select><i data-fa-icon="chevron-down"></i></div></label>
       </div>
 
       <div class="pane" id="paneTeam">
         <label class="field"><span class="field-label">عنوان المشروع</span><input name="title" class="input" placeholder="مثال: منصّة لدعم الصحة النفسية للطلبة"/></label>
         <label class="field"><span class="field-label">اشرح فكرتك بعبارات بسيطة</span><textarea name="description" class="input" rows="3" placeholder="ما المشكلة التي يحلّها مشروعك؟"></textarea></label>
-        <label class="field"><span class="field-label">نوع الفريق</span><div class="select"><select name="projectType" id="typeSelect" class="input"></select><i data-lucide="chevron-down"></i></div></label>
+        <label class="field"><span class="field-label">نوع الفريق</span><div class="select"><select name="projectType" id="typeSelect" class="input"></select><i data-fa-icon="chevron-down"></i></div></label>
         <label class="field"><span class="field-label">التخصّصات أو المهارات المطلوبة</span><input name="neededSpecialties" class="input" placeholder="مثال: علم النفس، الاقتصاد، القانون"/><span class="field-hint">افصل بينها بفاصلة، ليصلك الطلبة من تلك التخصّصات.</span></label>
         <label class="field"><span class="field-label">ما الذي تحتاجه من الأعضاء؟ (اختياري)</span><textarea name="roleDescription" class="input" rows="2" placeholder="مثال: تصميم الاستبيان وتحليل النتائج"></textarea></label>
       </div>
@@ -55,7 +57,7 @@
       </div>
 
       <fieldset class="secure">
-        <legend><i data-lucide="shield-lock"></i> بيانات تواصلك — مخفيّة حتى تقبل طلبًا</legend>
+        <legend><i data-fa-icon="shield-lock"></i> بيانات تواصلك — مخفيّة حتى تقبل طلبًا</legend>
         <label class="field"><span class="field-label">بريدك الإلكتروني</span><input name="email" type="email" class="input" required placeholder="name@univ-medea.dz"/></label>
         <div class="field-row">
           <label class="field"><span class="field-label">هاتف / واتساب (اختياري)</span><input name="phone" class="input" inputmode="tel" placeholder="0X XX XX XX XX"/></label>
@@ -64,37 +66,37 @@
         </div>
       </fieldset>
 
-      <label class="policy"><input type="checkbox" name="agree" required/><span>أوافق على شروط الاستخدام وسياسة الخصوصية، وأفهم أنّ بيانات تواصلي لن تٌشارك إلا بموافقتي.</span></label>
-      <button type="submit" class="btn btn-primary btn-block"><i data-lucide="check"></i> انشر واحصل على رمزك</button>
+      <label class="policy"><input type="checkbox" name="agree" required/><span>أوافق على شروط الاستخدام وسياسة الخصوصية، وأفهم أنّ بيانات تواصلي لن تُشارك إلا بموافقتي.</span></label>
+      <button type="submit" class="btn btn-primary btn-block"><i data-fa-icon="check"></i> انشر واحصل على رمزك</button>
       <p class="auth-alt">ألديك حساب؟ <a href="../dashboard/dashboard.html">ادخل لوحتك</a></p>
     </form>
 
     <div id="successState" class="success" hidden>
-      <div class="success-icon"><i data-lucide="key-round"></i></div>
+      <div class="success-icon"><i data-fa-icon="key-round"></i></div>
       <h2>رمزك العامّ جاهز</h2>
       <p>به يبحث عنك الزملاء ويتواصلون معك. احتفظ به، وشارك مشروعك لتصلك الطلبات أسرع.</p>
       
       <div class="code-box">
         <span id="resultCode" class="code-value">SHRK-XXXXXXXX</span>
-        <button id="copyCode" type="button" class="btn btn-glass btn-sm" data-copy=""><i data-lucide="copy"></i> نسخ الرمز</button>
+        <button id="copyCode" type="button" class="btn btn-glass btn-sm" data-copy=""><i data-fa-icon="copy"></i> نسخ الرمز</button>
         
         <!-- ★ نصيحة لقطة الشاشة الجديدة ★ -->
         <p style="font-size:.75rem; color:var(--ink-3); margin-top:8px; display:flex; align-items:center; gap:4px; justify-content:center;">
-          <i data-lucide="camera" style="width:12px;height:12px;"></i> 
+          <i data-fa-icon="camera" style="width:12px;height:12px;"></i> 
           💡 نصيحة: التقط صورة للشاشة الآن واحتفظ بها!
         </p>
       </div>
 
       <div class="success-actions">
-        <button id="shareProj" type="button" class="btn btn-primary btn-block"><i data-lucide="share-2"></i> شارك مشروعك الآن</button>
-        <a href="../search/search.html?tab=partners" class="btn btn-glass btn-block"><i data-lucide="user-search"></i> ابحث عمّن يُكمّل فريقك</a>
-        <a id="goDash" href="../dashboard/dashboard.html" class="btn btn-quiet btn-block"><i data-lucide="inbox"></i> ادخل لوحتي</a>
+        <button id="shareProj" type="button" class="btn btn-primary btn-block"><i data-fa-icon="share-2"></i> شارك مشروعك الآن</button>
+        <a href="../search/search.html?tab=partners" class="btn btn-glass btn-block"><i data-fa-icon="user-search"></i> ابحث عمّن يُكمّل فريقك</a>
+        <a id="goDash" href="../dashboard/dashboard.html" class="btn btn-quiet btn-block"><i data-fa-icon="inbox"></i> ادخل لوحتي</a>
       </div>
     </div>
   </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<!-- ★ حذفنا lucide.min.js واستبدلناه بـ Font Awesome في الـ head ★ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
