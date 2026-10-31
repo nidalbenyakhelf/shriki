@@ -19,6 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<!-- ★ استبدال Lucide بـ Font Awesome ★ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="home/home.css"/>
 </head>
 <body data-page="home">
@@ -28,7 +30,7 @@
     <a href="./" class="brand">
       <span class="brand-mark has-logo" id="brandMark">
         <img src="assets/logo.png" alt="شريك" onerror="this.closest('.brand-mark').classList.remove('has-logo')">
-        <i data-lucide="users"></i>
+        <i data-fa-icon="users"></i>
       </span>
       <span class="brand-name">شريك</span>
     </a>
@@ -45,21 +47,21 @@
 
     <div class="nav-actions">
       <div class="pop-wrap" id="contactWrap">
-        <button type="button" class="icon-btn" id="contactMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="contactMenu" aria-label="تواصل أو اقتراح" title="تواصل أو اقتراح"><i data-lucide="lightbulb"></i></button>
+        <button type="button" class="icon-btn" id="contactMenuBtn" aria-haspopup="true" aria-expanded="false" aria-controls="contactMenu" aria-label="تواصل أو اقتراح" title="تواصل أو اقتراح"><i data-fa-icon="lightbulb"></i></button>
         <div class="pop-menu" id="contactMenu" role="menu">
-          <button type="button" role="menuitem" data-share><i data-lucide="share-2"></i><span>شارك المنصّة</span></button>
-          <button type="button" role="menuitem" data-open="suggestModal"><i data-lucide="lightbulb"></i><span>اقترح فكرة أو تحسينًا</span></button>
-          <button type="button" role="menuitem" data-open="contactModal"><i data-lucide="message-circle"></i><span>تواصل معنا</span></button>
+          <button type="button" role="menuitem" data-share><i data-fa-icon="share-2"></i><span>شارك المنصّة</span></button>
+          <button type="button" role="menuitem" data-open="suggestModal"><i data-fa-icon="lightbulb"></i><span>اقترح فكرة أو تحسينًا</span></button>
+          <button type="button" role="menuitem" data-open="contactModal"><i data-fa-icon="message-circle"></i><span>تواصل معنا</span></button>
         </div>
       </div>
-      <a href="search/search.html" class="icon-btn desk-only" aria-label="بحث"><i data-lucide="search"></i></a>
-      <a href="dashboard/dashboard.html" class="icon-btn desk-only" aria-label="لوحتي"><i data-lucide="inbox"></i></a>
+      <a href="search/search.html" class="icon-btn desk-only" aria-label="بحث"><i data-fa-icon="search"></i></a>
+      <a href="dashboard/dashboard.html" class="icon-btn desk-only" aria-label="لوحتي"><i data-fa-icon="inbox"></i></a>
       <!-- ★ الزر الذكي: نص + أيقونة على الحاسوب، أيقونة فقط على الهاتف ★ -->
       <a href="register/register.html" class="btn btn-primary btn-sm">
-        <i data-lucide="plus"></i>
+        <i data-fa-icon="plus"></i>
         <span class="hide-sm">أنشئ مشروعًا</span>
       </a>
-      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="القائمة" aria-expanded="false"><i data-lucide="menu"></i></button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="القائمة" aria-expanded="false"><i data-fa-icon="menu"></i></button>
     </div>
   </div>
 </header>
@@ -69,21 +71,21 @@
     <div class="hero-media"><img src="assets/university.jpg" alt="جامعة يحيى فارس – المدية"/></div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-content">
-      <span class="eyebrow"><i data-lucide="graduation-cap"></i> مبادرةٌ من طلبة · جامعة يحيى فارس – المدية</span>
+      <span class="eyebrow"><i data-fa-icon="graduation-cap"></i> مبادرةٌ من طلبة · جامعة يحيى فارس – المدية</span>
       <h1>من الفكرة إلى <span class="hl">الفريق</span></h1>
-      <p class="hero-sub">تجمع «شريك» طلبة التخصّصات المختلفة لتكوين فرق متكاملة لمشاريع التخرّج والشركات الناشئة والمبادرات. انشر ما تحتاجه، ويصلك من يٌكمل الصورة — بموافقتك أنت.</p>
+      <p class="hero-sub">تجمع «شريك» طلبة التخصّصات المختلفة لتكوين فرق متكاملة لمشاريع التخرّج والشركات الناشئة والمبادرات. انشر ما تحتاجه، ويصلك من يُكمل الصورة — بموافقتك أنت.</p>
       <div class="hero-actions">
-        <a href="register/register.html?kind=team" class="btn btn-primary"><i data-lucide="rocket"></i> أنشئ مشروعًا</a>
-        <a href="search/search.html" class="btn btn-glass"><i data-lucide="search"></i> استكشف الفرق</a>
+        <a href="register/register.html?kind=team" class="btn btn-primary"><i data-fa-icon="rocket"></i> أنشئ مشروعًا</a>
+        <a href="search/search.html" class="btn btn-glass"><i data-fa-icon="search"></i> استكشف الفرق</a>
       </div>
-      <div class="privacy-note"><i data-lucide="shield-check"></i> بياناتك محفوظة بأمان، ولا يظهر تواصلك إلا بعد موافقتك المتبادلة.</div>
+      <div class="privacy-note"><i data-fa-icon="shield-check"></i> بياناتك محفوظة بأمان، ولا يظهر تواصلك إلا بعد موافقتك المتبادلة.</div>
     </div>
   </section>
 
   <section class="rail reveal" id="rail">
     <div class="rail-head">
-      <div><h2>مشاريع تبحث عن أعضاء</h2><p>اسحب جانبيًا لاستكشاف أحدث ما نٌشر.</p></div>
-      <a href="search/search.html?tab=teams" class="rail-more">عرض الكل <i data-lucide="arrow-left"></i></a>
+      <div><h2>مشاريع تبحث عن أعضاء</h2><p>اسحب جانبيًا لاستكشاف أحدث ما نُشر.</p></div>
+      <a href="search/search.html?tab=teams" class="rail-more">عرض الكل <i data-fa-icon="arrow-left"></i></a>
     </div>
     <div class="poster-row" id="teamsRow"></div>
   </section>
@@ -104,9 +106,9 @@
     <div class="wrap">
       <div class="sec-head"><h2>ثلاث خطوات بسيطة</h2><p>لا تحتاج خبرة تقنية؛ يكفيك فكرة، ومهارات ناقصة، ورغبة في العمل مع آخرين.</p></div>
       <div class="steps-grid">
-        <article class="step"><div class="step-icon"><i data-lucide="file-plus-2"></i></div><h3>انشر مشروعك</h3><p>اكتب الفكرة، ونوع المشروع، والكليات أو المهارات التي تنقصك.</p></article>
-        <article class="step"><div class="step-icon"><i data-lucide="user-search"></i></div><h3>يصلك من يُكملك</h3><p>يطّلع الطلبة من التخصّصات الأخرى على مشروعك ويرسلون طلب انضمام.</p></article>
-        <article class="step"><div class="step-icon"><i data-lucide="handshake"></i></div><h3>كوّن الفريق بثقة</h3><p>اقبل الطلبات المناسبة، وابدأ التواصل فقط مع من تختاره.</p></article>
+        <article class="step"><div class="step-icon"><i data-fa-icon="file-plus-2"></i></div><h3>انشر مشروعك</h3><p>اكتب الفكرة، ونوع المشروع، والكليات أو المهارات التي تنقصك.</p></article>
+        <article class="step"><div class="step-icon"><i data-fa-icon="user-search"></i></div><h3>يصلك من يُكملك</h3><p>يطّلع الطلبة من التخصّصات الأخرى على مشروعك ويرسلون طلب انضمام.</p></article>
+        <article class="step"><div class="step-icon"><i data-fa-icon="handshake"></i></div><h3>كوّن الفريق بثقة</h3><p>اقبل الطلبات المناسبة، وابدأ التواصل فقط مع من تختاره.</p></article>
       </div>
     </div>
   </section>
@@ -116,12 +118,12 @@
     <div class="wrap">
       <div class="sec-head"><h2>لأي نوع من الفرق تصلح؟</h2><p>ليست «شريك» مقتصرة على مذكرات التخرج، بل تصلح لأي فريق يحتاج تخصّصات متكاملة.</p></div>
       <div class="goal-grid">
-        <article class="goal-card"><div class="goal-icon"><i data-lucide="graduation-cap"></i></div><h3>مذكرة تخرّج</h3><p>فريق مختلط يجمع البحث بالجانب التطبيقي.</p></article>
-        <article class="goal-card"><div class="goal-icon"><i data-lucide="rocket"></i></div><h3>شركة ناشئة</h3><p>من فكرة إلى نموذج أولي، نحو علامة مشروع مبتكر.</p></article>
-        <article class="goal-card"><div class="goal-icon"><i data-lucide="lightbulb"></i></div><h3>مشروع خارج الجامعة</h3><p>مبادرة، أو منتج، أو خدمة بين طلبة من تخصّصات مختلفة.</p></article>
-        <article class="goal-card"><div class="goal-icon"><i data-lucide="trophy"></i></div><h3>مسابقة أو بحث</h3><p>فريق سريع ومحدّد المهمة لمسابقة أو بحث علمي.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i data-fa-icon="graduation-cap"></i></div><h3>مذكرة تخرّج</h3><p>فريق مختلط يجمع البحث بالجانب التطبيقي.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i data-fa-icon="rocket"></i></div><h3>شركة ناشئة</h3><p>من فكرة إلى نموذج أولي، نحو علامة مشروع مبتكر.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i data-fa-icon="lightbulb"></i></div><h3>مشروع خارج الجامعة</h3><p>مبادرة، أو منتج، أو خدمة بين طلبة من تخصّصات مختلفة.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i data-fa-icon="trophy"></i></div><h3>مسابقة أو بحث</h3><p>فريق سريع ومحدّد المهمة لمسابقة أو بحث علمي.</p></article>
         <!-- ★ البطاقة الجديدة ★ -->
-        <article class="goal-card"><div class="goal-icon"><i data-lucide="heart-handshake"></i></div><h3>مبادرة خيرية</h3><p>تنظيم حملات تطوعية، جمع تبرعات، أو دعم مجتمع محلي بتعاون بين التخصصات.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i data-fa-icon="heart-handshake"></i></div><h3>مبادرة خيرية</h3><p>تنظيم حملات تطوعية، جمع تبرعات، أو دعم مجتمع محلي بتعاون بين التخصصات.</p></article>
       </div>
     </div>
   </section>
@@ -129,7 +131,7 @@
   <section class="story reveal" id="story">
     <div class="wrap">
       <div class="story-inner">
-        <span class="story-tag"><i data-lucide="users-round"></i> الهدف</span>
+        <span class="story-tag"><i data-fa-icon="users-round"></i> الهدف</span>
         <h2>لماذا «شريك»؟</h2>
         <p>في جامعتنا تخصّصاتٌ كثيرة، وكلٌّ منها يرى نصف الصورة فقط: مَن يبرمج لا يعرف كيف يُصاغ البحث، ومَن يدرس القانون لا يلمس البيانات، ومَن يُصمّم يبحث عمّن يحمل الفكرة إلى السوق. المشكلة ليست في غياب الموهبة، بل في غياب <b>اللقاء</b>.</p>
         <p>وُلدت «شريك» من هذه الفجوة — مبادرةٌ من طلبة أرادوا أن يجعلوا تعدّد التخصّصات <b>نقطة قوّة لا سببَ تباعد</b>. الفكرة بسيطة: أن يلتقي مَن لديه مشروعٌ بمَن يُكمِله، فيُنتَج ما يعجز عنه الفرد وحده، وتُخدَم به الجامعة والمجتمع معًا.</p>
@@ -143,13 +145,13 @@
     <div class="wrap narrow">
       <div class="sec-head"><h2>الأسئلة الشائعة</h2><p>إجابات صريحة عن طبيعة المنصّة وآليتها وخصوصيتها.</p></div>
       <div class="faq">
-        <details class="faq-item"><summary><span>هل هذه منصّة رسمية تابعة للجامعة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لا. «شريك» مبادرة شخصية مستقلّة من طلبة، وليست جهة رسميّة ولا تتبع إدارة الجامعة. أُطلقَت لحلّ مشكلة واجهها الطلبة في تكوين الفرق.</p></div></details>
-        <details class="faq-item"><summary><span>لماذا لا أنشئ حسابًا بكلمة مرور؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لأن أبسط طريق ممكن هو الأفضل: تحصل على رمز عامٍّ (<code>SHRK-XXXX</code>) يُستعمل للبحث والتواصل، وبلا تسجيل معقّد. الرمز ليس كلمة مرور ولا يفتح حسابك.</p></div></details>
-        <details class="faq-item"><summary><span>كيف أحمي بياناتي؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>بريدك وهاتفك مخفيّان تمامًا، ولا يظهران للطرف الآخر إلا بعد أن تقبل أنت طلبه من لوحتك. لا مراسلة عشوائية ولا إزعاج.</p></div></details>
-        <details class="faq-item"><summary><span>لأي نوع من المشاريع تصلح المنصّة؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>لمذكرات التخرّج، والشركات الناشئة، والمسابقات والبحوث، وكذلك المشاريع المشتركة خارج الجامعة، وحتى المبادرات الخيرية والتطوعية. الفكرة واحدة: فريق مختلط يكمّل بعضه.</p></div></details>
-        <details class="faq-item"><summary><span>ماذا أكتب في «المهارات المطلوبة»؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>التخصّصات أو الأدوار التي تنقصك: تصميم واجهات، برمجة، قانون، تسويق، تحليل بيانات، كتابة محتوى، محاسبة… كلما حدّدتها بوضوح، وصلك الأنسب.</p></div></details>
-        <details class="faq-item"><summary><span>لم أجد شريكًا مناسبًا، ماذا أفعل؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>عدّل وصف مشروعك ليكون أوضح، وسّع قائمة التخصّصات المطلوبة، وراجع طلباتك الواردة دوريًا. وشارك المنصّة مع زملائك من الكليات الأخرى عبر زرّ «شارك» — فكلّما زاد العدد، زادت فرص إيجاد الشريك المثالي.</p></div></details>
-        <details class="faq-item"><summary><span>هل المنصّة مجانيّة؟ وكيف أقترح فكرة أو أبلغ عن خطأ؟</span><i data-lucide="chevron-down"></i></summary><div class="faq-body"><p>نعم، مجانيّة بالكامل. رأيك يهمّنا لتطويرها؛ استخدم زرّ «اقترح فكرة أو تحسينًا» في الأعلى أو في نهاية الصفحة.</p></div></details>
+        <details class="faq-item"><summary><span>هل هذه منصّة رسمية تابعة للجامعة؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>لا. «شريك» مبادرة شخصية مستقلّة من طلبة، وليست جهة رسميّة ولا تتبع إدارة الجامعة. أُطلقَت لحلّ مشكلة واجهها الطلبة في تكوين الفرق.</p></div></details>
+        <details class="faq-item"><summary><span>لماذا لا أنشئ حسابًا بكلمة مرور؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>لأن أبسط طريق ممكن هو الأفضل: تحصل على رمز عامٍّ (<code>SHRK-XXXX</code>) يُستعمل للبحث والتواصل، وبلا تسجيل معقّد. الرمز ليس كلمة مرور ولا يفتح حسابك.</p></div></details>
+        <details class="faq-item"><summary><span>كيف أحمي بياناتي؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>بريدك وهاتفك مخفيّان تمامًا، ولا يظهران للطرف الآخر إلا بعد أن تقبل أنت طلبه من لوحتك. لا مراسلة عشوائية ولا إزعاج.</p></div></details>
+        <details class="faq-item"><summary><span>لأي نوع من المشاريع تصلح المنصّة؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>لمذكرات التخرّج، والشركات الناشئة، والمسابقات والبحوث، وكذلك المشاريع المشتركة خارج الجامعة، وحتى المبادرات الخيرية والتطوعية. الفكرة واحدة: فريق مختلط يكمّل بعضه.</p></div></details>
+        <details class="faq-item"><summary><span>ماذا أكتب في «المهارات المطلوبة»؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>التخصّصات أو الأدوار التي تنقصك: تصميم واجهات، برمجة، قانون، تسويق، تحليل بيانات، كتابة محتوى، محاسبة… كلما حدّدتها بوضوح، وصلك الأنسب.</p></div></details>
+        <details class="faq-item"><summary><span>لم أجد شريكًا مناسبًا، ماذا أفعل؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>عدّل وصف مشروعك ليكون أوضح، وسّع قائمة التخصّصات المطلوبة، وراجع طلباتك الواردة دوريًا. وشارك المنصّة مع زملائك من الكليات الأخرى عبر زرّ «شارك» — فكلّما زاد العدد، زادت فرص إيجاد الشريك المثالي.</p></div></details>
+        <details class="faq-item"><summary><span>هل المنصّة مجانيّة؟ وكيف أقترح فكرة أو أبلغ عن خطأ؟</span><i data-fa-icon="chevron-down"></i></summary><div class="faq-body"><p>نعم، مجانيّة بالكامل. رأيك يهمّنا لتطويرها؛ استخدم زرّ «اقترح فكرة أو تحسينًا» في الأعلى أو في نهاية الصفحة.</p></div></details>
       </div>
     </div>
   </section>
@@ -158,11 +160,11 @@
     <div class="wrap narrow">
       <div class="sec-head"><h2>هل أنت مستعدّ لتكوين فريقك؟</h2><p>ابدأ الآن بنشر مشروعك، أو استكشف الفرق التي تبحث عن مهاراتك. وشارك المنصّة مع زملائك من الكليات الأخرى — فكلّما زاد عدد المشاركين، زادت فرص إيجاد الشريك المثالي.</p></div>
       <div class="cta-actions">
-        <a href="register/register.html?kind=team" class="btn btn-primary"><i data-lucide="square-pen"></i> أنشئ مشروعًا</a>
-        <a href="register/register.html?kind=student" class="btn btn-glass"><i data-lucide="user-plus"></i> سجّل كشريك</a>
-        <button type="button" class="btn btn-glass" data-share><i data-lucide="share-2"></i> شارك المنصّة</button>
-        <button type="button" class="btn btn-quiet" data-open="suggestModal"><i data-lucide="lightbulb"></i> اقترح فكرة أو تحسينًا</button>
-        <button type="button" class="btn btn-quiet" data-open="contactModal"><i data-lucide="message-circle"></i> تواصل معنا</button>
+        <a href="register/register.html?kind=team" class="btn btn-primary"><i data-fa-icon="square-pen"></i> أنشئ مشروعًا</a>
+        <a href="register/register.html?kind=student" class="btn btn-glass"><i data-fa-icon="user"></i> سجّل كشريك</a>
+        <button type="button" class="btn btn-glass" data-share><i data-fa-icon="share-2"></i> شارك المنصّة</button>
+        <button type="button" class="btn btn-quiet" data-open="suggestModal"><i data-fa-icon="lightbulb"></i> اقترح فكرة أو تحسينًا</button>
+        <button type="button" class="btn btn-quiet" data-open="contactModal"><i data-fa-icon="message-circle"></i> تواصل معنا</button>
       </div>
     </div>
   </section>
@@ -170,7 +172,7 @@
 
 <footer class="footer">
   <div class="wrap footer-inner">
-    <p class="footer-note">صنع بحبٍّ لطلبة جامعة يحيى فارس – المدية <i data-lucide="heart" class="heart"></i></p>
+    <p class="footer-note">صنع بحبٍّ لطلبة جامعة يحيى فارس – المدية <i data-fa-icon="heart" class="heart"></i></p>
     <p class="footer-disclaimer">«شريك» مبادرة شخصية مستقلّة من طلبة، وليست منصّة رسميّة تابعة للجامعة. لا تُمحَى بياناتك عند حذف الحساب، ولا تشارك مع أي طرف ثالث.</p>
     <nav class="footer-links">
       <a href="search/search.html">البحث</a>
@@ -188,12 +190,12 @@
 
 <div class="modal" id="suggestModal">
   <div class="modal-card">
-    <div class="modal-head"><h2><i data-lucide="lightbulb"></i> اقترح فكرة أو تحسينًا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-lucide="x"></i></button></div>
+    <div class="modal-head"><h2><i data-fa-icon="lightbulb"></i> اقترح فكرة أو تحسينًا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-fa-icon="x"></i></button></div>
     <p style="color:var(--ink-2);font-size:.9rem">رأيك يهمّنا لتطوير المنصّة وخدمة الطلبة على نحو أفضل. اكتب اقتراحك وسنراجعه.</p>
     <form id="sugForm" class="auth-form" style="gap:14px">
       <div class="field-row">
         <label class="field"><span class="field-label">اسمك (اختياري)</span><input id="sugName" class="input" placeholder="مثال: محمد"/></label>
-        <label class="field"><span class="field-label">بريدك الإلكتروني *</span><input id="sugEmail" class="input" type="email" required placeholder="name@univ-medea.dz"/><span class="field-hint">لن يٌستخدم إلا للردّ على اقتراحك.</span></label>
+        <label class="field"><span class="field-label">بريدك الإلكتروني *</span><input id="sugEmail" class="input" type="email" required placeholder="name@univ-medea.dz"/><span class="field-hint">لن يُستخدم إلا للردّ على اقتراحك.</span></label>
       </div>
       <label class="field"><span class="field-label">نوع الاقتراح</span>
         <div class="select"><select id="sugType" class="input">
@@ -201,10 +203,10 @@
           <option value="improvement">تحسين على ميزة موجودة</option>
           <option value="bug">الإبلاغ عن خطأ</option>
           <option value="other">أخرى</option>
-        </select><i data-lucide="chevron-down"></i></div>
+        </select><i data-fa-icon="chevron-down"></i></div>
       </label>
       <label class="field"><span class="field-label">اكتب اقتراحك *</span><textarea id="sugText" class="input" rows="4" required placeholder="مثال: أتمنى إضافة فلتر حسب الكلية في صفحة البحث…"></textarea></label>
-      <button type="submit" class="btn btn-primary btn-block"><i data-lucide="send"></i> إرسال الاقتراح</button>
+      <button type="submit" class="btn btn-primary btn-block"><i data-fa-icon="send"></i> إرسال الاقتراح</button>
     </form>
   </div>
 </div>
@@ -212,7 +214,7 @@
 <!-- ★ MODAL: تواصل مباشر (يُرسل رسالة نصية إليك) ★ -->
 <div class="modal" id="contactModal">
   <div class="modal-card">
-    <div class="modal-head"><h2><i data-lucide="message-circle"></i> تواصل معنا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-lucide="x"></i></button></div>
+    <div class="modal-head"><h2><i data-fa-icon="message-circle"></i> تواصل معنا</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق"><i data-fa-icon="x"></i></button></div>
     
     <!-- ★ وصف جديد يوضح أن الرسالة تصل مباشرة للمطور ★ -->
     <p style="color:var(--ink-2);font-size:.9rem">هل لديك سؤال، اقتراح، أو تريد التعاون؟ اكتب رسالتك هنا وستصلني مباشرةً لأرد عليك.</p>
@@ -235,13 +237,13 @@
         <textarea name="messageBody" rows="4" class="input" required placeholder="اكتب ما يدور في ذهنك..."></textarea>
       </label>
       
-      <button type="submit" class="btn btn-primary btn-block"><i data-lucide="send"></i> إرسال الرسالة</button>
+      <button type="submit" class="btn btn-primary btn-block"><i data-fa-icon="send"></i> إرسال الرسالة</button>
     </form>
   </div>
 </div>
 
 <!-- ★ الترتيب الحرج: المكتبات أولا ثم كود المشروع ★ -->
-<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<!-- حذفنا lucide.min.js واستبدلناه بـ Font Awesome في الـ head -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
