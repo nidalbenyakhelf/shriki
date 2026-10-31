@@ -1,9 +1,8 @@
 /* ============================================================
-   شريك — الإصدار النهائي المستقر (Stable Release v4 - Font Awesome)
-   - استخدام Font Awesome للأيقونات (أكثر استقرارًا وأقل حظرًا).
-   - إزالة الاعتماد على Lucide JS بالكامل.
-   - إصلاح مشكلة فقدان الجلسة في "لوحتي".
-   - إصلاح إرسال الطلبات (Compat mode fix).
+   شريك — الإصدار النهائي المستقر (Stable Release v7 - Fixed Visibility)
+   - إصلاح حاسم: إجبار ظهور عناصر .reveal فوراً لمنع الاختفاء.
+   - دعم Font Awesome للأيقونات.
+   - معالجة أخطاء Firebase الشاملة.
    ============================================================ */
 
 (function() {
@@ -12,7 +11,17 @@
   // ==========================================
   // 1. Setup & Config
   // ==========================================
-  if (typeof firebase === 'undefined') { console.error("Firebase not loaded"); return; }
+  
+  // التحقق الصارم من توفر Firebase قبل البدء
+  if (typeof firebase === 'undefined') {
+    console.error("❌ CRITICAL ERROR: Firebase SDK is NOT loaded.");
+    // محاولة عرض رسالة خطأ للمستخدم إذا كانت الصفحة الرئيسية
+    const row = document.getElementById('teamsRow');
+    if (row) {
+      row.innerHTML = `<div class="empty rail-empty"><h3>خطأ في الاتصال</h3><p>تعذر تحميل خدمات قاعدة البيانات. يرجى تحديث الصفحة.</p></div>`;
+    }
+    return; 
+  }
 
   const firebaseConfig = {
     apiKey: "AIzaSyCJC93gVdQgYjLUBOOW9JA0m_44xBximIs",
@@ -23,11 +32,18 @@
     appId: "1:177417794605:web:c2a332887cb53787cfb4a4"
   };
 
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  
-  const db = firebase.firestore();
-  const auth = firebase.auth();
-  const FV = firebase.firestore.FieldValue;
+  let db, auth, FV;
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    db = firebase.firestore();
+    auth = firebase.auth();
+    FV = firebase.firestore.FieldValue;
+  } catch (e) {
+    console.error("Initialization Error:", e);
+    return;
+  }
 
   const COL_P = "shrik_profiles";
   const COL_C = "shrik_contacts";
@@ -40,10 +56,15 @@
   const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   const initial = t => (String(t || "").trim().charAt(0) || "?");
   
-  // ★ لا نحتاج لدالة icons() بعد الآن لأن Font Awesome يعمل عبر CSS فقط ★
-  // لكننا نبقيها فارغة للتوافق مع الكود القديم إذا كانت تُستدعى في مكان ما
+  // ★ دالة icons فارغة لأن Font Awesome يعمل عبر CSS فقط ★
   const icons = () => {}; 
   
+  // ★ الإصلاح الحاسم: دالة لإظهار جميع عناصر reveal فوراً ★
+  const forceRevealAll = () => {
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(el => el.classList.add('in'));
+  };
+
   const ALPHA = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
   function makeCode(prefix="SHRK") {
     let s=""; for(let i=0;i<8;i++) s+=ALPHA[Math.floor(Math.random()*ALPHA.length)];
@@ -53,8 +74,6 @@
   // Constants
   const FACULTIES = ["كلية العلوم","كلية التكنولوجيا","كلية العلوم الإنسانية والاجتماعية","كلية الآداب واللغات","كلية الحقوق والعلوم السياسية","كلية العلوم الاقتصادية","ملحقة الطب","ملحقة الأساتذة"];
   const PROJECT_TYPES = ["مذكرة تخرج","شركة ناشئة","مشروع خارج الجامعة","مسابقة / بحث علمي","مبادرة خيرية"];
-  // ★ تحديث خريطة الأيقونات لتستخدم أسماء Font Awesome ★
-  const WM_ICON = {"مذكرة تخرج":"graduation-cap","شركة ناشئة":"rocket","مشروع خارج الجامعة":"lightbulb","مسابقة / بحث علمي":"trophy","مبادرة خيرية":"heart"}; 
 
   // ==========================================
   // 2. Store Layer (Data Operations)
@@ -80,15 +99,23 @@
 
   async function getUserProfile(uid) {
     if(!uid) return null;
-    const snap = await db.collection(COL_P).doc(uid).get();
-    return snap.exists ? { id: snap.id, ...snap.data() } : null;
+    try {
+        const snap = await db.collection(COL_P).doc(uid).get();
+        return snap.exists ? { id: snap.id, ...snap.data() } : null;
+    } catch(e) {
+        console.error("Get Profile Error:", e);
+        return null;
+    }
   }
 
   async function getAllProfiles() {
     try {
       const snap = await db.collection(COL_P).limit(500).get();
       return snap.docs.map(d => ({ id: d.id, ...d.data(), createdAt: d.data().createdAt?.toDate().toISOString() || "" }));
-    } catch(e) { console.error(e); return []; }
+    } catch(e) { 
+      console.error("Fetch All Profiles Error:", e); 
+      return []; 
+    }
   }
 
   async function createOrUpdateProfile(profileData, contactData) {
@@ -132,7 +159,6 @@
     const dup = await db.collection(COL_R).where("fromUid","==",user.uid).where("toUid","==",to.id).where("status","==","pending").limit(1).get();
     if(!dup.empty) return { error: "duplicate" };
 
-    // Rate limit simple check (fetch last 24h requests manually due to compat issues with count())
     const since = new Date(Date.now() - 86400000);
     const recentSnap = await db.collection(COL_R).where("fromUid","==",user.uid).where("createdAt",">=",firebase.firestore.Timestamp.fromDate(since)).get();
     if(recentSnap.size >= 5) return { error: "rate_limited" };
@@ -171,7 +197,6 @@
   function toast(type, title, msg) {
     let c = $("#toastContainer");
     if(!c) { c=document.createElement("div"); c.id="toastContainer"; c.className="toast-container"; document.body.appendChild(c); }
-    // ★ استخدام data-fa-icon بدل data-lucide ★
     const ic={success:"check-circle-2",error:"x-circle",warning:"alert-triangle",info:"info"};
     const t=document.createElement("div"); t.className=`toast toast-${type}`;
     t.innerHTML=`<div class="toast-icon"><i data-fa-icon="${ic[type]}"></i></div><div class="toast-content"><div class="toast-title">${esc(title)}</div><div class="toast-message">${esc(msg)}</div></div>`;
@@ -192,40 +217,57 @@
 
   // --- HOME PAGE ---
   async function initHome() {
+    // ★ الخطوة الأولى والأهم: إظهار كل شيء مخفي فوراً ★
+    forceRevealAll();
+
     const row = $("#teamsRow");
     if(row) {
       try {
         const profiles = await getAllProfiles();
         const teams = profiles.filter(p => p.kind === "team");
-        row.innerHTML = teams.length ? teams.map(p => `
-          <div class="poster-cell">
-            <a class="poster" href="search/search.html?tab=teams">
-              <span class="p-badge"><i data-fa-icon="tag"></i> ${esc(p.projectType||"فريق")}</span>
-              <span class="p-body"><span class="p-title">${esc(p.title||p.name)}</span></span>
-            </a>
-            <div class="p-meta"><span class="pm-faculty">${esc(p.faculty)}</span></div>
-          </div>
-        `).join("") : `<div class="empty rail-empty"><h3>لا مشاريع بعد</h3></div>`;
-      } catch(e) { console.error(e); }
+        
+        if (teams.length > 0) {
+            row.innerHTML = teams.map(p => `
+              <div class="poster-cell">
+                <a class="poster" href="search/search.html?tab=teams">
+                  <span class="p-badge"><i data-fa-icon="tag"></i> ${esc(p.projectType||"فريق")}</span>
+                  <span class="p-body"><span class="p-title">${esc(p.title||p.name)}</span></span>
+                </a>
+                <div class="p-meta"><span class="pm-faculty">${esc(p.faculty)}</span></div>
+              </div>
+            `).join("");
+        } else {
+            row.innerHTML = `<div class="empty rail-empty"><h3>لا مشاريع بعد</h3><p>كن أول من ينشر فكرته!</p></div>`;
+        }
+      } catch(e) { 
+          console.error("Init Home Data Error:", e);
+          if(row) row.innerHTML = `<div class="empty rail-empty"><h3>حدث خطأ أثناء جلب البيانات</h3><p>تحقق من اتصال الإنترنت أو قواعد الأمان.</p></div>`;
+      }
     }
     
     const sugForm = $("#sugForm");
     if(sugForm) sugForm.addEventListener("submit", async e => {
       e.preventDefault();
-      await saveSuggestion({ name: $("#sugName").value, email: $("#sugEmail").value, content: $("#sugText").value, type: $("#sugType").value });
-      closeModals(); toast("success","شكرًا","تم استلام اقتراحك.");
+      try {
+        await saveSuggestion({ name: $("#sugName").value, email: $("#sugEmail").value, content: $("#sugText").value, type: $("#sugType").value });
+        closeModals(); toast("success","شكرًا","تم استلام اقتراحك.");
+      } catch(err) { toast("error","فشل الإرسال","تحقق من الاتصال."); }
     });
 
     const contForm = $("#directContactForm");
     if(contForm) contForm.addEventListener("submit", async e => {
       e.preventDefault();
-      await saveSuggestion({ senderName: e.target.senderName.value, senderEmail: e.target.senderEmail.value, messageBody: e.target.messageBody.value, type: "contact_message" });
-      closeModals(); toast("success","وصلتنا رسالتك","سنرد قريبًا.");
+      try {
+        await saveSuggestion({ senderName: e.target.senderName.value, senderEmail: e.target.senderEmail.value, messageBody: e.target.messageBody.value, type: "contact_message" });
+        closeModals(); toast("success","وصلتنا رسالتك","سنرد قريبًا.");
+      } catch(err) { toast("error","فشل الإرسال","تحقق من الاتصال."); }
     });
   }
 
   // --- REGISTER PAGE ---
   async function initRegister() {
+    forceRevealAll(); // ضمان ظهور الحقول
+    
     const form = $("#registerForm");
     if(!form) return;
     
@@ -265,6 +307,8 @@
 
   // --- SEARCH PAGE ---
   async function initSearch() {
+    forceRevealAll(); // ضمان ظهور نتائج البحث
+    
     const results = $("#results");
     const tabs = $$("#searchTabs .seg-btn");
     let currentTab = "teams";
@@ -333,6 +377,8 @@
 
   // --- DASHBOARD PAGE ---
   async function initDashboard() {
+    forceRevealAll(); // ضمان ظهور اللوحة
+    
     const gate = $("#gate");
     const panel = $("#panel");
     
@@ -473,6 +519,8 @@
 
   // --- ADMIN PAGE ---
   async function initAdmin() {
+    forceRevealAll(); // ضمان ظهور الرسائل
+    
     const container = $("#messagesList");
     if(!container) return;
     container.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
@@ -503,11 +551,15 @@
     }).join("");
   }
 
-  // Router
-  if(page==="home") initHome();
-  else if(page==="register") initRegister();
-  else if(page==="search") initSearch();
-  else if(page==="dashboard") initDashboard();
-  else if(page==="admin") initAdmin();
+  // Router with Safety Net
+  try {
+    if(page==="home") initHome();
+    else if(page==="register") initRegister();
+    else if(page==="search") initSearch();
+    else if(page==="dashboard") initDashboard();
+    else if(page==="admin") initAdmin();
+  } catch(globalErr) {
+    console.error("Global Initialization Error:", globalErr);
+  }
 
 })();
