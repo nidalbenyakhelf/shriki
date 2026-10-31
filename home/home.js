@@ -1,4 +1,4 @@
-/* ============================================================
+ذ/* ============================================================
    شريك — الإصدار النهائي المستقر (Stable Release v4 - Font Awesome)
    - استخدام Font Awesome للأيقونات (أكثر استقرارًا وأقل حظرًا).
    - إزالة الاعتماد على Lucide JS بالكامل.
@@ -38,7 +38,7 @@
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
   const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-  const initial = t => (String(t || "").trim().charAt(0) || "؟");
+  const initial = t => (String(t || "").trim().charAt(0) || "?");
   
   // ★ لا نحتاج لدالة icons() بعد الآن لأن Font Awesome يعمل عبر CSS فقط ★
   // لكننا نبقيها فارغة للتوافق مع الكود القديم إذا كانت تُستدعى في مكان ما
@@ -132,6 +132,7 @@
     const dup = await db.collection(COL_R).where("fromUid","==",user.uid).where("toUid","==",to.id).where("status","==","pending").limit(1).get();
     if(!dup.empty) return { error: "duplicate" };
 
+    // Rate limit simple check (fetch last 24h requests manually due to compat issues with count())
     const since = new Date(Date.now() - 86400000);
     const recentSnap = await db.collection(COL_R).where("fromUid","==",user.uid).where("createdAt",">=",firebase.firestore.Timestamp.fromDate(since)).get();
     if(recentSnap.size >= 5) return { error: "rate_limited" };
@@ -319,7 +320,7 @@
         
         const res = await sendRequest(code, msg);
         if(res.ok) { closeModals(); toast("success","تم الإرسال","سيصل للطرف في لوحته."); }
-        else if(res.error==="no_profile") toast("warning","سجل أولًا","أنشئ ملفك لإرسال الطلبات.");
+        else if(res.error==="no_profile") toast("warning","سجل أولاً","أنشئ ملفك لإرسال الطلبات.");
         else if(res.error==="duplicate") toast("warning","طلب معلّق","لديك طلب سابق لنفس الشخص.");
         else if(res.error==="rate_limited") toast("warning","بلغت الحد","5 طلبات يوميًا فقط.");
         else toast("error","فشل الإرسال", res.error);
