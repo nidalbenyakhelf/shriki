@@ -7,26 +7,28 @@
 <title>ابحث عن شريك — شريك</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<!-- ★ استبدال Lucide بـ Font Awesome ★ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="../home/home.css"/>
 </head>
 <body data-page="search">
 
 <div class="page-bar">
-  <a href="../index.html" class="btn btn-quiet"><i data-lucide="arrow-right"></i> رجوع</a>
+  <a href="../index.html" class="btn btn-quiet"><i data-fa-icon="arrow-right"></i> رجوع</a>
   <div class="page-title">ابحث عن شريك</div>
-  <a href="../dashboard/dashboard.html" class="icon-btn" aria-label="لوحتي"><i data-lucide="inbox"></i></a>
+  <a href="../dashboard/dashboard.html" class="icon-btn" aria-label="لوحتي"><i data-fa-icon="inbox"></i></a>
 </div>
 
 <main class="wrap search-main">
   <div class="sec-head" style="margin-bottom:24px"><h2>ما الذي تبحث عنه اليوم؟</h2><p>اختر: هل ترغب في الانضمام إلى مشروع، أم في عرض نفسك كشريك متاح؟</p></div>
 
   <div class="seg" id="searchTabs" style="margin-bottom:20px">
-    <button type="button" class="seg-btn active" data-tab="teams"><i data-lucide="rocket"></i> مشاريع تحتاج فريقًا</button>
-    <button type="button" class="seg-btn" data-tab="partners"><i data-lucide="user"></i> شركاء متاحون</button>
+    <button type="button" class="seg-btn active" data-tab="teams"><i data-fa-icon="rocket"></i> مشاريع تحتاج فريقًا</button>
+    <button type="button" class="seg-btn" data-tab="partners"><i data-fa-icon="user"></i> شركاء متاحون</button>
   </div>
 
   <section class="toolbar">
-    <label class="search"><i data-lucide="search"></i><input id="q" type="text" placeholder="ابحث بكلمة…"/></label>
+    <label class="search"><i data-fa-icon="search"></i><input id="q" type="text" placeholder="ابحث بكلمة…"/></label>
     
     <!-- ★ قائمة الفلتر الجديدة حسب النوع ★ -->
     <div class="select">
@@ -38,11 +40,11 @@
         <option value="مسابقة / بحث علمي">مسابقة / بحث علمي</option>
         <option value="مبادرة خيرية">مبادرة خيرية</option>
       </select>
-      <i data-lucide="chevron-down"></i>
+      <i data-fa-icon="chevron-down"></i>
     </div>
 
-    <div class="select"><select id="fFaculty" class="input"></select><i data-lucide="chevron-down"></i></div>
-    <div class="select"><select id="fSort" class="input"><option value="newest">الأحدث</option><option value="oldest">الأقدم</option><option value="needed">الأكثر حاجةً</option></select><i data-lucide="chevron-down"></i></div>
+    <div class="select"><select id="fFaculty" class="input"></select><i data-fa-icon="chevron-down"></i></div>
+    <div class="select"><select id="fSort" class="input"><option value="newest">الأحدث</option><option value="oldest">الأقدم</option><option value="needed">الأكثر حاجةً</option></select><i data-fa-icon="chevron-down"></i></div>
   </section>
 
   <div class="chips-scroll" id="specChips"></div>
@@ -52,16 +54,16 @@
 
 <div class="modal" id="reqModal">
   <div class="modal-card">
-    <div class="modal-head"><h2><i data-lucide="send"></i> أرسل طلبًا</h2><button type="button" class="icon-btn" data-close><i data-lucide="x"></i></button></div>
-    <div class="note"><i data-lucide="shield-lock"></i><span>تُرسل بياناتك كطلب، ولا يراها الطرف الآخر إلا إذا قبلها من لوحته.</span></div>
+    <div class="modal-head"><h2><i data-fa-icon="send"></i> أرسل طلبًا</h2><button type="button" class="icon-btn" data-close><i data-fa-icon="x"></i></button></div>
+    <div class="note"><i data-fa-icon="shield-lock"></i><span>تُرسل بياناتك كطلب، ولا يراها الطرف الآخر إلا إذا قبلها من لوحته.</span></div>
     <p style="color:var(--ink-2);font-size:.92rem">إلى: <b id="reqTo" style="color:var(--ink)"></b></p>
     <label class="field"><span class="field-label">رسالتك *</span><textarea id="reqMsg" class="input" rows="3" required placeholder="عرّف بتخصّصك وما يمكنك تقديمه…"></textarea></label>
-    <button id="sendReq" type="button" class="btn btn-primary btn-block"><i data-lucide="send"></i> أرسل الطلب</button>
-    <p class="tiny">ألستَ تملك ملفًّّا بعد؟ <a href="../register/register.html">سجّل أولًا</a></p>
+    <button id="sendReq" type="button" class="btn btn-primary btn-block"><i data-fa-icon="send"></i> أرسل الطلب</button>
+    <p class="tiny">ألستَ تملك ملفًّا بعد؟ <a href="../register/register.html">سجّل أولًا</a></p>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<!-- ★ حذفنا lucide.min.js واستبدلناه بـ Font Awesome في الـ head ★ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
