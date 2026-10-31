@@ -1,7 +1,7 @@
 /* ============================================================
-   شريك — الإصدار النهائي المستقر (Stable Release v3 - No External Icons)
-   - إزالة الاعتماد على مكتبة Lucide تماماً لمنع أخطاء الحظر.
-   - استخدام نظام الأيقونات الاحتياطي (CSS Emojis).
+   شريك — الإصدار النهائي المستقر (Stable Release v4 - Font Awesome)
+   - استخدام Font Awesome للأيقونات (أكثر استقرارًا وأقل حظرًا).
+   - إزالة الاعتماد على Lucide JS بالكامل.
    - إصلاح مشكلة فقدان الجلسة في "لوحتي".
    - إصلاح إرسال الطلبات (Compat mode fix).
    ============================================================ */
@@ -40,13 +40,9 @@
   const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   const initial = t => (String(t || "").trim().charAt(0) || "؟");
   
-  // ★ الإصلاح الحاسم: دالة icons أصبحت فارغة أو مجرد تأكيد بسيط ★
-  // لأن الأيقونات الآن تُرسم عبر CSS (::before)، لا نحتاج لمكتبة JS.
-  // هذه الدالة موجودة فقط للتوافق مع الكود القديم، لكنها لن تفعل شيئاً ضاراً.
-  const icons = () => {
-    // لا نفعل شيئاً هنا، لأن CSS يتولى الأمر.
-    // إذا أردت إضافة تأثيرات حركية بسيطة لاحقاً، يمكنك وضعها هنا.
-  };
+  // ★ لا نحتاج لدالة icons() بعد الآن لأن Font Awesome يعمل عبر CSS فقط ★
+  // لكننا نبقيها فارغة للتوافق مع الكود القديم إذا كانت تُستدعى في مكان ما
+  const icons = () => {}; 
   
   const ALPHA = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
   function makeCode(prefix="SHRK") {
@@ -57,20 +53,19 @@
   // Constants
   const FACULTIES = ["كلية العلوم","كلية التكنولوجيا","كلية العلوم الإنسانية والاجتماعية","كلية الآداب واللغات","كلية الحقوق والعلوم السياسية","كلية العلوم الاقتصادية","ملحقة الطب","ملحقة الأساتذة"];
   const PROJECT_TYPES = ["مذكرة تخرج","شركة ناشئة","مشروع خارج الجامعة","مسابقة / بحث علمي","مبادرة خيرية"];
-  const WM_ICON = {"مذكرة تخرج":"graduation-cap","شركة ناشئة":"rocket","مشروع خارج الجامعة":"lightbulb","مسابقة / بحث علمي":"trophy","مبادرة خيرية":"heart-handshake"};
+  // ★ تحديث خريطة الأيقونات لتستخدم أسماء Font Awesome ★
+  const WM_ICON = {"مذكرة تخرج":"graduation-cap","شركة ناشئة":"rocket","مشروع خارج الجامعة":"lightbulb","مسابقة / بحث علمي":"trophy","مبادرة خيرية":"heart"}; 
 
   // ==========================================
   // 2. Store Layer (Data Operations)
   // ==========================================
   
-  // Wait for Auth to be ready before doing anything critical
   function waitForAuth() {
     return new Promise(resolve => {
       const unsub = auth.onAuthStateChanged(user => {
-        unsub(); // Unsubscribe immediately after first check
+        unsub(); 
         resolve(user);
       });
-      // Timeout safety
       setTimeout(() => resolve(auth.currentUser), 5000);
     });
   }
@@ -118,12 +113,10 @@
     const user = await ensureUser();
     if(!user) return;
     
-    // Delete Profile
     await db.collection(COL_P).doc(user.uid).delete();
-    // Delete Contact
     await db.collection(COL_C).doc(user.uid).delete();
     
-    await auth.signOut(); // Force logout
+    await auth.signOut(); 
   }
 
   async function sendRequest(toCode, message) {
@@ -136,11 +129,9 @@
     if(!to) return { error: "bad_code" };
     if(to.id === user.uid) return { error: "self" };
 
-    // Check duplicate pending
     const dup = await db.collection(COL_R).where("fromUid","==",user.uid).where("toUid","==",to.id).where("status","==","pending").limit(1).get();
     if(!dup.empty) return { error: "duplicate" };
 
-    // Rate limit simple check
     const since = new Date(Date.now() - 86400000);
     const recentSnap = await db.collection(COL_R).where("fromUid","==",user.uid).where("createdAt",">=",firebase.firestore.Timestamp.fromDate(since)).get();
     if(recentSnap.size >= 5) return { error: "rate_limited" };
@@ -179,19 +170,17 @@
   function toast(type, title, msg) {
     let c = $("#toastContainer");
     if(!c) { c=document.createElement("div"); c.id="toastContainer"; c.className="toast-container"; document.body.appendChild(c); }
+    // ★ استخدام data-fa-icon بدل data-lucide ★
     const ic={success:"check-circle-2",error:"x-circle",warning:"alert-triangle",info:"info"};
     const t=document.createElement("div"); t.className=`toast toast-${type}`;
-    // نستخدم نفس أسماء data-lucide لأن CSS سيتعامل معها كـ Emojis
-    t.innerHTML=`<div class="toast-icon"><i data-lucide="${ic[type]}"></i></div><div class="toast-content"><div class="toast-title">${esc(title)}</div><div class="toast-message">${esc(msg)}</div></div>`;
+    t.innerHTML=`<div class="toast-icon"><i data-fa-icon="${ic[type]}"></i></div><div class="toast-content"><div class="toast-title">${esc(title)}</div><div class="toast-message">${esc(msg)}</div></div>`;
     c.appendChild(t); 
-    icons(); // استدعاء آمن (فارغ حالياً)
     setTimeout(()=>t.remove(), 4000);
   }
 
-  function openModal(id){ $(`#${id}`).classList.add("open"); document.body.style.overflow="hidden"; icons(); }
+  function openModal(id){ $(`#${id}`).classList.add("open"); document.body.style.overflow="hidden"; }
   function closeModals(){ $$(".modal.open").forEach(m=>m.classList.remove("open")); document.body.style.overflow=""; }
 
-  // Global Listeners
   document.addEventListener("click", e => {
     if(e.target.closest("[data-open]")) { e.preventDefault(); openModal(e.target.dataset.open); }
     if(e.target.matches(".modal") || e.target.closest("[data-close]")) closeModals();
@@ -210,17 +199,15 @@
         row.innerHTML = teams.length ? teams.map(p => `
           <div class="poster-cell">
             <a class="poster" href="search/search.html?tab=teams">
-              <span class="p-badge"><i data-lucide="tag"></i> ${esc(p.projectType||"فريق")}</span>
+              <span class="p-badge"><i data-fa-icon="tag"></i> ${esc(p.projectType||"فريق")}</span>
               <span class="p-body"><span class="p-title">${esc(p.title||p.name)}</span></span>
             </a>
             <div class="p-meta"><span class="pm-faculty">${esc(p.faculty)}</span></div>
           </div>
         `).join("") : `<div class="empty rail-empty"><h3>لا مشاريع بعد</h3></div>`;
       } catch(e) { console.error(e); }
-      icons(); 
     }
     
-    // Suggest Form
     const sugForm = $("#sugForm");
     if(sugForm) sugForm.addEventListener("submit", async e => {
       e.preventDefault();
@@ -228,7 +215,6 @@
       closeModals(); toast("success","شكرًا","تم استلام اقتراحك.");
     });
 
-    // Direct Contact Form
     const contForm = $("#directContactForm");
     if(contForm) contForm.addEventListener("submit", async e => {
       e.preventDefault();
@@ -242,7 +228,6 @@
     const form = $("#registerForm");
     if(!form) return;
     
-    // Fill Selects
     const facSel = $("#facSelect"); if(facSel) facSel.innerHTML = FACULTIES.map(f=>`<option value="${f}">${f}</option>`).join("");
     const typeSel = $("#typeSelect"); if(typeSel) typeSel.innerHTML = PROJECT_TYPES.map(t=>`<option value="${t}">${t}</option>`).join("");
 
@@ -267,7 +252,6 @@
         $("#resultCode").textContent = res.code;
         $("#copyCode").setAttribute("data-copy", res.code);
         form.hidden = true; $("#successState").hidden = false;
-        icons(); 
         toast("success","تم النشر!", `رمزك: ${res.code}`);
       } catch(err) {
         console.error(err);
@@ -293,7 +277,7 @@
     }
 
     function render() {
-      if(!cache.length) { results.innerHTML = `<div class="empty"><h3>لا نتائج</h3></div>`; icons(); return; }
+      if(!cache.length) { results.innerHTML = `<div class="empty"><h3>لا نتائج</h3></div>`; return; }
       results.innerHTML = cache.map(p => {
         const isTeam = p.kind === "team";
         const chips = isTeam ? (p.neededSpecialties||[]).slice(0,3).map(s=>`<span class="chip">${esc(s)}</span>`).join("") : (p.skills||[]).slice(0,3).map(s=>`<span class="chip">${esc(s)}</span>`).join("");
@@ -307,13 +291,12 @@
             <div class="tc-chips">${chips}</div>
             <div class="tc-foot">
               <button class="btn btn-primary btn-sm btn-block" data-code="${esc(p.code)}" data-name="${esc(isTeam?p.title:p.name)}">
-                <i data-lucide="send"></i> ${isTeam?"اطلب الانضمام":"تواصل معه"}
+                <i data-fa-icon="send"></i> ${isTeam?"اطلب الانضمام":"تواصل معه"}
               </button>
             </div>
           </article>
         `;
       }).join("");
-      icons(); 
     }
 
     tabs.forEach(b => b.onclick = () => {
@@ -336,9 +319,9 @@
         
         const res = await sendRequest(code, msg);
         if(res.ok) { closeModals(); toast("success","تم الإرسال","سيصل للطرف في لوحته."); }
-        else if(res.error==="no_profile") toast("warning","سجل أولاً","أنشئ ملفك لإرسال الطلبات.");
+        else if(res.error==="no_profile") toast("warning","سجل أولًا","أنشئ ملفك لإرسال الطلبات.");
         else if(res.error==="duplicate") toast("warning","طلب معلّق","لديك طلب سابق لنفس الشخص.");
-        else if(res.error==="rate_limited") toast("warning","بلغت الحد","5 طلبات يومياً فقط.");
+        else if(res.error==="rate_limited") toast("warning","بلغت الحد","5 طلبات يوميًا فقط.");
         else toast("error","فشل الإرسال", res.error);
       };
       openModal("reqModal");
@@ -347,18 +330,15 @@
     load();
   }
 
-  // --- DASHBOARD PAGE (FIXED AUTH ISSUE) ---
+  // --- DASHBOARD PAGE ---
   async function initDashboard() {
     const gate = $("#gate");
     const panel = $("#panel");
     
-    // Show loading state
     gate.hidden = false; panel.hidden = true;
     $("#gateTitle").textContent = "جارٍ التحقق...";
     $("#gateText").textContent = "لحظات.";
-    icons(); 
 
-    // CRITICAL FIX: Wait for auth state to settle
     const user = await waitForAuth();
 
     if (!user) {
@@ -372,7 +352,6 @@
       return;
     }
 
-    // Success: Render Dashboard
     gate.hidden = true; panel.hidden = false;
     renderDashHead(profile);
     bindDashActions(user.uid);
@@ -383,17 +362,15 @@
     $("#gate").hidden=false; $("#panel").hidden=true;
     $("#gateTitle").textContent="لا توجد جلسة";
     $("#gateText").textContent="أنشئ ملفك لتبدأ.";
-    $("#gateBtn").innerHTML='<i data-lucide="user-plus"></i> أنشئ ملفّي';
+    $("#gateBtn").innerHTML='<i data-fa-icon="user"></i> أنشئ ملفّي';
     $("#gateBtn").onclick=()=>location.href="../register/register.html";
-    icons(); 
   }
   function showNoProfile() {
     $("#gate").hidden=false; $("#panel").hidden=true;
     $("#gateTitle").textContent="أكمل التسجيل";
     $("#gateText").textContent="وُجدت جلسة لكن لا ملف.";
-    $("#gateBtn").innerHTML='<i data-lucide="square-pen"></i> أنشئ ملفّي';
+    $("#gateBtn").innerHTML='<i data-fa-icon="edit"></i> أنشئ ملفّي';
     $("#gateBtn").onclick=()=>location.href="../register/register.html";
-    icons(); 
   }
 
   function renderDashHead(p) {
@@ -403,25 +380,22 @@
         <div class="dash-name">${esc(p.name)}</div>
         <div class="dash-meta">${esc(p.kind==='team'?'صاحب مشروع':'شريك')} · ${esc(p.faculty)}</div>
       </div>
-      <button class="dash-code" data-copy="${esc(p.code)}"><i data-lucide="hash"></i> ${esc(p.code)}</button>
+      <button class="dash-code" data-copy="${esc(p.code)}"><i data-fa-icon="hashtag"></i> ${esc(p.code)}</button>
     `;
-    icons(); 
   }
 
   function bindDashActions(uid) {
-    // Tabs
     $$("#dashTabs .seg-btn").forEach(b => b.onclick = () => {
       $$("#dashTabs .seg-btn").forEach(x=>x.classList.remove("active"));
       b.classList.add("active");
       refreshDashLists(uid, b.dataset.d);
     });
 
-    // Accept/Reject/Delete Request
     document.addEventListener("click", async e => {
       const act = e.target.closest("[data-action]");
       if(!act) return;
       const id = act.dataset.id;
-      const action = act.dataset.action; // accept, reject, delete_req
+      const action = act.dataset.action;
       
       if(action === "delete_req") {
         if(confirm("حذف هذا الطلب؟")) {
@@ -438,7 +412,6 @@
       refreshDashLists(uid);
     });
 
-    // Logout / Switch Account
     $("#switchAcc").onclick = async () => {
       if(confirm("إنهاء الجلسة على هذا الجهاز؟")) {
         await auth.signOut();
@@ -446,11 +419,10 @@
       }
     };
 
-    // DELETE MY PROFILE BUTTON (New Feature)
     const delBtn = $("#deleteProfileBtn");
     if(delBtn) {
       delBtn.onclick = async () => {
-        if(confirm("⚠️ تحذير: سيتم حذف ملفك وعرضك نهائياً من المنصة. هل أنت متأكد؟")) {
+        if(confirm("⚠️ تحذير: سيتم حذف ملفك وعرضك نهائيًا من المنصة. هل أنت متأكد؟")) {
           delBtn.disabled = true; delBtn.textContent = "جارٍ الحذف...";
           try {
             await deleteMyAccount();
@@ -468,13 +440,11 @@
   async function refreshDashLists(uid, tab="incoming") {
     const listEl = $("#reqList");
     listEl.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
-    icons(); 
     
     const reqs = await getMyRequests(tab);
     
     if(!reqs.length) {
       listEl.innerHTML = `<div class="empty"><h3>${tab==='incoming'?'لا طلبات واردة':'لا طلبات صادرة'}</h3></div>`;
-      icons();
       return;
     }
 
@@ -484,7 +454,7 @@
       const actions = r.status === 'pending' && tab === 'incoming' 
         ? `<button class="btn btn-primary btn-sm" data-action="accept" data-id="${r.id}">قبل</button>
            <button class="btn btn-glass btn-sm" data-action="reject" data-id="${r.id}">ارفض</button>`
-        : `<button class="btn btn-quiet btn-sm" data-action="delete_req" data-id="${r.id}"><i data-lucide="trash-2"></i> حذف</button>`;
+        : `<button class="btn btn-quiet btn-sm" data-action="delete_req" data-id="${r.id}"><i data-fa-icon="trash"></i> حذف</button>`;
       
       return `
         <article class="req ${stClass}">
@@ -498,7 +468,6 @@
         </article>
       `;
     }).join("");
-    icons(); 
   }
 
   // --- ADMIN PAGE ---
@@ -506,12 +475,11 @@
     const container = $("#messagesList");
     if(!container) return;
     container.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
-    icons(); 
     
-    await ensureUser(); // Ensure we have an ID to pass security rules
+    await ensureUser(); 
     const snap = await db.collection(COL_S).orderBy("createdAt","desc").limit(100).get();
     
-    if(snap.empty) { container.innerHTML = `<div class="empty"><h3>لا رسائل</h3></div>`; icons(); return; }
+    if(snap.empty) { container.innerHTML = `<div class="empty"><h3>لا رسائل</h3></div>`; return; }
     
     container.innerHTML = snap.docs.map(d => {
       const m = d.data();
@@ -532,7 +500,6 @@
         </div>
       `;
     }).join("");
-    icons(); 
   }
 
   // Router
