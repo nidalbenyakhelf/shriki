@@ -152,7 +152,47 @@ svg.lucide-icon, svg[class*="lucide"] { display: none !important; }
 .input{width:100%;height:48px;padding:0 14px;border:none;border-radius:var(--r-sm);background:var(--lift);outline:none;transition:.2s var(--ease);color:var(--ink);font-size:.95rem}
 .input::placeholder{color:var(--ink-3)}.input:focus{background:var(--surface-3);box-shadow:0 0 0 2px rgba(25,127,211,.2)}
 textarea.input{height:auto;min-height:90px;padding:12px 14px;resize:vertical;line-height:1.5}
-.select{position:relative}.select select{appearance:none;-webkit-appearance:none;padding-inline-end:40px;cursor:pointer;width:100%;height:48px;background:var(--lift);border:none;border-radius:var(--r-sm);color:var(--ink);font-size:.95rem}
+/* ★ إصلاح القوائم المنسدلة للثيم الداكن ★ */
+.select { position: relative; }
+.select select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-inline-end: 40px;
+    cursor: pointer;
+    width: 100%;
+    height: 48px;
+    background: var(--surface-2); /* خلفية أغمق قليلاً للتمييز */
+    border: 1px solid var(--line-2); /* إضافة حدود خفيفة للرؤية */
+    border-radius: var(--r-sm);
+    color: #fff !important; /* إجبار النص على البياض */
+    font-size: .95rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+.select select:focus {
+    outline: none;
+    border-color: var(--accent-bright);
+    box-shadow: 0 0 0 2px rgba(25, 127, 211, 0.2);
+}
+/* إصلاح ألوان الخيارات داخل القائمة المفتوحة */
+.select select option {
+    background-color: var(--bg); /* خلفية سوداء/داكنة للخيارات */
+    color: #fff; /* نص أبيض للخيارات */
+    padding: 10px;
+}
+/* السهم المخصص (Chevron) */
+.select>i[data-fa-icon="chevron-down"], 
+.select i.fa-chevron-down {
+    position: absolute;
+    inset-inline-end: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--ink-3);
+    pointer-events: none;
+    font-size: 1rem;
+}
 .select>i[data-fa-icon="chevron-down"]{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-3);pointer-events:none;font-size:1rem;}
 .field-row{display:grid;grid-template-columns:1fr;gap:12px}
 .policy{display:flex;align-items:flex-start;gap:8px;font-size:.85rem;color:var(--ink-2);cursor:pointer;margin-top:10px}
