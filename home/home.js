@@ -1,7 +1,6 @@
 /* ============================================================
-   شريك — Universal Engine vFinal (Supports All Pages)
-   Detects page via body[data-page] and runs specific logic.
-   Includes Home Search, Register Form, Dashboard Auth.
+   شريك — Universal Engine vFinal (All Pages Supported)
+   Handles: Home Search, Register Form, Dashboard Auth, Global UI.
    ============================================================ */
 
 (function() {
@@ -30,7 +29,7 @@
     if (page === 'home') initHomePage();
     else if (page === 'register') initRegisterPage();
     else if (page === 'dashboard') initDashboardPage();
-    else if (page === 'search') initSearchPage();
+    else if (page === 'search') initSearchPage(); // Reuses home logic mostly
     
     // Set current year in footer
     const yearEl = document.getElementById('year');
@@ -219,8 +218,32 @@
     const form = document.getElementById('registerForm');
     if(!form) return;
 
-    // Populate Selects dynamically if needed (assuming hardcoded in HTML for simplicity here)
-    
+    // ★ IMPORTANT: Populate Selects Dynamically ★
+    populateSelects();
+
+    // Handle Kind Tabs (Team vs Student)
+    const kindTabs = document.querySelectorAll('#kindTabs .seg-btn');
+    const paneTeam = document.getElementById('paneTeam');
+    const paneStudent = document.getElementById('paneStudent');
+    const kindField = document.getElementById('kindField');
+
+    kindTabs.forEach(btn => {
+      btn.onclick = () => {
+        kindTabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const kind = btn.dataset.kind;
+        kindField.value = kind;
+        
+        if(kind === 'team') {
+          paneTeam.hidden = false;
+          paneStudent.hidden = true;
+        } else {
+          paneTeam.hidden = true;
+          paneStudent.hidden = false;
+        }
+      };
+    });
+
     form.onsubmit = async (e) => {
       e.preventDefault();
       if(!isFirebaseReady) return alert("انتظر تحميل النظام...");
@@ -237,6 +260,7 @@
         name: fd.get('name'),
         faculty: fd.get('faculty'),
         year: fd.get('year'),
+        email: fd.get('email'), // Stored for contact
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
@@ -244,27 +268,28 @@
         Object.assign(profileData, {
           title: fd.get('title'),
           description: fd.get('description'),
-          type: fd.get('projectType'), // Mapped to 'type' for consistency with Home
+          type: fd.get('projectType'), 
           neededSkill: fd.get('neededSpecialties'),
-          email: fd.get('email') // Storing email directly for simple contact flow
         });
       } else {
         Object.assign(profileData, {
           specialty: fd.get('specialty'),
           skills: fd.get('skills'),
           bio: fd.get('bio'),
-          email: fd.get('email')
         });
       }
 
       try {
-        // Save to Firestore
+        // Save to Firestore Collection 'projects'
         await db.collection('projects').add(profileData);
         
         // Show Success State
         form.hidden = true;
-        document.getElementById('successState').hidden = false;
-        document.getElementById('resultCode').textContent = "SHRK-" + Math.random().toString(36).substr(2, 8).toUpperCase();
+        const successState = document.getElementById('successState');
+        if(successState) successState.hidden = false;
+        
+        const codeBox = document.getElementById('resultCode');
+        if(codeBox) codeBox.textContent = "SHRK-" + Math.random().toString(36).substr(2, 8).toUpperCase();
         
         alert("تم نشر مشروعك بنجاح!");
       } catch(err) {
@@ -274,6 +299,24 @@
         btn.disabled=false; btn.innerText=origTxt;
       }
     };
+  }
+
+  function populateSelects() {
+    const faculties = ["كلية العلوم","كلية التكنولوجيا","كلية العلوم الإنسانية والاجتماعية","كلية الآداب واللغات","كلية الحقوق والعلوم السياسية","كلية العلوم الاقتصادية"];
+    const years = ["السنة الأولى","السنة الثانية","السنة الثالثة","السنة الرابعة","ماستر","دكتوراه"];
+    const types = ["مذكرة تخرج","شركة ناشئة","مشروع خارج الجامعة","مسابقة / بحث علمي","مبادرة خيرية"];
+
+    const fillSelect = (selector, options, placeholder) => {
+      const el = document.querySelector(selector);
+      if(el) {
+        el.innerHTML = `<option value="" disabled selected>${placeholder}</option>` + 
+                       options.map(o => `<option value="${o}">${o}</option>`).join('');
+      }
+    };
+
+    fillSelect('select[name="faculty"]', faculties, 'اختر كليتك');
+    fillSelect('select[name="year"]', years, 'اختر سنتك');
+    fillSelect('select[name="projectType"]', types, 'اختر نوع المشروع');
   }
 
   // ==========================================
@@ -295,30 +338,39 @@
 
     function showGate(title, msg, link) {
       gate.hidden = false; panel.hidden = true;
-      document.getElementById('gateTitle').textContent = title;
-      document.getElementById('gateText').textContent = msg;
-      document.getElementById('gateBtn').onclick = ()=>location.href=link;
+      const gTitle = document.getElementById('gateTitle');
+      const gText = document.getElementById('gateText');
+      const gBtn = document.getElementById('gateBtn');
+      
+      if(gTitle) gTitle.textContent = title;
+      if(gText) gText.textContent = msg;
+      if(gBtn) gBtn.onclick = ()=>location.href=link;
     }
 
     async function loadUserProfile(uid) {
       try {
-        const snap = await db.collection('projects').where('__name__', '==', uid).limit(1).get(); // Assuming doc ID matches UID or querying by owner
+        // Query projects owned by this user (assuming we store uid or match by email/name for demo)
+        // For robustness, let's assume we query all and filter client-side or use a dedicated 'users' collection.
+        // Here we'll just fetch recent projects for the demo dashboard view.
         
-        // For this simplified version, we'll just query all projects created by this user if we stored UID, 
-        // but since we used add(), IDs are random. 
-        // BETTER APPROACH FOR DEMO: Just show a generic dashboard message if logged in.
+        const snap = await db.collection('projects').where('email', '==', auth.currentUser.email).limit(5).get();
         
         gate.hidden = true; panel.hidden = false;
-        document.getElementById('dashHead').innerHTML = `
-          <div class="avatar">U</div>
-          <div>
-            <div class="dash-name">مرحبا بك</div>
-            <div class="dash-meta">لوحة التحكم التجريبية</div>
-          </div>
-        `;
         
+        const dashHead = document.getElementById('dashHead');
+        if(dashHead) {
+          dashHead.innerHTML = `
+            <div class="avatar">U</div>
+            <div>
+              <div class="dash-name">مرحبا بك (${auth.currentUser.email})</div>
+              <div class="dash-meta">عدد مشاريعك: ${snap.size}</div>
+            </div>
+          `;
+        }
+
         // Logout Button
-        document.getElementById('switchAcc').onclick = async ()=>{
+        const switchAcc = document.getElementById('switchAcc');
+        if(switchAcc) switchAcc.onclick = async ()=>{
           if(confirm("إنهاء الجلسة؟")) {
             await auth.signOut();
             location.reload();
@@ -335,9 +387,7 @@
   // 6. Page Specific Logic: SEARCH
   // ==========================================
   function initSearchPage() {
-    // Similar to Home but focused on full list filtering
-    // Reusing Home logic structure for brevity in this response
-    // In production, extract shared functions.
+    // For now, reuse Home logic but maybe hide the Hero section if present
     initHomePage(); 
   }
 
@@ -352,7 +402,7 @@
   }
   
   function esc(s) {
-    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"<").replace(/>/g,">");
   }
 
 })();
