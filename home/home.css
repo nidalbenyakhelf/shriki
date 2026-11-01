@@ -34,8 +34,18 @@ p{color:var(--ink-2)}main{flex:1}
 .narrow{max-width:720px}:focus-visible{outline:2px solid var(--accent-bright);outline-offset:2px}
 ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:#1c4f7e;border-radius:var(--r-pill)}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
-.reveal{opacity:0;transform:translateY(15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+/* ★ الإصلاح الحاسم: جعل العناصر ظاهرة افتراضياً ★ */
+.reveal { 
+    /* نزيل الشفافية الصفرية ونجعلها 1 مباشرة */
+    opacity: 1; 
+    transform: none; 
+    transition: none; /* إلغاء الحركة لمنع التذبذب */
+}
+/* نحتفظ بكلاس .in للتوافق مع الكود القديم لكن بلا تأثير بصري مخفي */
+.reveal.in { 
+    opacity: 1; 
+    transform: none; 
+}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.spin{animation:none!important}}
 .spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 
