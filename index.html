@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 
-<!-- أيقونات Font Awesome (موثوقة وخفيفة) -->
+<!-- أيقونات Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- ملف التنسيق الرئيسي -->
@@ -19,7 +19,7 @@
 </head>
 <body data-page="home">
 
-<!-- ★ الهيدر (Navbar) - نفس التصميم الأصلي ★ -->
+<!-- ★ الهيدر (Navbar) ★ -->
 <header class="navbar" id="navbar">
   <div class="nav-inner">
     <a href="./" class="brand">
@@ -34,6 +34,7 @@
       <a href="./" class="nav-link active">الرئيسية</a>
       <a href="#rail" class="nav-link">المشاريع</a>
       <a href="#story" class="nav-link">الهدف</a>
+      <a href="#faq" class="nav-link">الأسئلة</a>
       <a href="search/search.html" class="nav-link">ابحث</a>
       <a href="dashboard/dashboard.html" class="nav-link">لوحتي</a>
     </nav>
@@ -59,7 +60,7 @@
 </header>
 
 <main>
-  <!-- ★ قسم البطل (Hero) - الاحتفاظ بالجمال الأصلي ★ -->
+  <!-- ★ قسم البطل (Hero) ★ -->
   <section class="hero" id="top">
     <div class="hero-media"><img src="assets/university.jpg" alt="جامعة يحيى فارس – المدية"/></div>
     <div class="hero-scrim" aria-hidden="true"></div>
@@ -74,11 +75,11 @@
     </div>
   </section>
 
-  <!-- ★ قسم المشاريع مع محرك البحث الجديد (Kayak Style Integration) ★ -->
-  <section class="rail reveal" id="rail">
+  <!-- ★ قسم المشاريع مع محرك البحث ★ -->
+  <section class="rail" id="rail">
     <div class="container-wide">
         
-        <!-- صندوق البحث العائم (Glassmorphism يتناسب مع الثيم الداكن) -->
+        <!-- صندوق البحث العائم -->
         <div class="search-engine-box">
             <div class="se-tabs">
                 <button class="se-tab active" data-type="all">الكل</button>
@@ -104,68 +105,41 @@
             <a href="search/search.html?tab=teams" class="rail-more">عرض الكل <i class="fa-solid fa-arrow-left-long"></i></a>
         </div>
         
-        <!-- الحاوية التي سيملؤها JavaScript ديناميكياً -->
+        <!-- الحاوية الديناميكية -->
         <div class="poster-row" id="teamsRow"></div>
     </div>
   </section>
 
-  <!-- بقية الأقسام الأصلية تبقى كما هي لضمان الهوية -->
-  <section class="steps reveal" id="how">
+  <!-- ★ قسم الخطوات (Steps) - ظهر فورا بدون reveal معقد ★ -->
+  <section class="steps" id="how">
     <div class="wrap">
-      <div class="sec-head"><h2>ثلاث خطوات بسيطة</h2></div>
+      <div class="sec-head"><h2>ثلاث خطوات بسيطة</h2><p>لا تحتاج خبرة تقنية؛ يكفيك فكرة، ومهارات ناقصة، ورغبة في العمل مع آخرين.</p></div>
       <div class="steps-grid">
-        <article class="step"><div class="step-icon"><i class="fa-solid fa-file-plus"></i></div><h3>انشر مشروعك</h3><p>اكتب الفكرة والمهارات المطلوبة.</p></article>
-        <article class="step"><div class="step-icon"><i class="fa-solid fa-user-magnifying-glass"></i></div><h3>يصلك من يُكملك</h3><p>يرسل الطلبة طلبات انضمام لمشروعك.</p></article>
-        <article class="step"><div class="step-icon"><i class="fa-solid fa-handshake-simple"></i></div><h3>كوّن الفريق</h3><p>اقبل الطلبات المناسبة وابدأ العمل.</p></article>
+        <article class="step"><div class="step-icon"><i class="fa-solid fa-file-plus"></i></div><h3>انشر مشروعك</h3><p>اكتب الفكرة، ونوع المشروع، والكليات أو المهارات التي تنقصك.</p></article>
+        <article class="step"><div class="step-icon"><i class="fa-solid fa-user-magnifying-glass"></i></div><h3>يصلك من يُكملك</h3><p>يطّلع الطلبة من التخصّصات الأخرى على مشروعك ويرسلون طلب انضمام.</p></article>
+        <article class="step"><div class="step-icon"><i class="fa-solid fa-handshake-simple"></i></div><h3>كوّن الفريق بثقة</h3><p>اقبل الطلبات المناسبة، وابدأ التواصل فقط مع من تختاره.</p></article>
       </div>
     </div>
   </section>
 
-  <section class="cta reveal" id="about">
-    <div class="wrap narrow">
-      <div class="sec-head"><h2>هل أنت مستعدّ؟</h2></div>
-      <div class="cta-actions">
-        <a href="register/register.html?kind=team" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> ابدأ الآن</a>
-        <button type="button" class="btn btn-glass" data-share><i class="fa-solid fa-share-nodes"></i> شارك المنصّة</button>
+  <!-- ★ قسم الأهداف (Goals) ★ -->
+  <section class="goals" id="goals">
+    <div class="wrap">
+      <div class="sec-head"><h2>لأي نوع من الفرق تصلح؟</h2><p>ليست «شريك» مقتصرة على مذكرات التخرج، بل تصلح لأي فريق يحتاج تخصّصات متكاملة.</p></div>
+      <div class="goal-grid">
+        <article class="goal-card"><div class="goal-icon"><i class="fa-solid fa-graduation-cap"></i></div><h3>مذكرة تخرّج</h3><p>فريق مختلط يجمع البحث بالجانب التطبيقي.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i class="fa-solid fa-rocket"></i></div><h3>شركة ناشئة</h3><p>من فكرة إلى نموذج أولي، نحو علامة مشروع مبتكر.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i class="fa-solid fa-lightbulb"></i></div><h3>مشروع خارج الجامعة</h3><p>مبادرة، أو منتج، أو خدمة بين طلبة من تخصّصات مختلفة.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i class="fa-solid fa-trophy"></i></div><h3>مسابقة أو بحث</h3><p>فريق سريع ومحدّد المهمة لمسابقة أو بحث علمي.</p></article>
+        <article class="goal-card"><div class="goal-icon"><i class="fa-solid fa-heart-pulse"></i></div><h3>مبادرة خيرية</h3><p>تنظيم حملات تطوعية، جمع تبرعات، أو دعم مجتمع محلي بتعاون بين التخصصات.</p></article>
       </div>
     </div>
   </section>
-</main>
 
-<footer class="footer">
-  <div class="wrap footer-inner">
-    <p class="copyright">© 2026 شريك — مبادرة طلبة مستقلّة.</p>
-  </div>
-</footer>
-
-<!-- ★ النوافذ المنبثقة (Modals) ★ -->
-<div class="modal" id="suggestModal">
-  <div class="modal-card">
-    <div class="modal-head"><h2><i class="fa-solid fa-lightbulb"></i> اقترح فكرة</h2><button type="button" class="icon-btn" data-close><i class="fa-solid fa-xmark"></i></button></div>
-    <form id="sugForm" class="auth-form">
-      <label class="field"><span class="field-label">بريدك الإلكتروني *</span><input id="sugEmail" class="input" type="email" required/></label>
-      <label class="field"><span class="field-label">اقتراحك *</span><textarea id="sugText" class="input" rows="3" required></textarea></label>
-      <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> إرسال</button>
-    </form>
-  </div>
-</div>
-
-<div class="modal" id="contactModal">
-  <div class="modal-card">
-    <div class="modal-head"><h2><i class="fa-solid fa-comment-dots"></i> تواصل معنا</h2><button type="button" class="icon-btn" data-close><i class="fa-solid fa-xmark"></i></button></div>
-    <form id="directContactForm" class="auth-form">
-      <label class="field"><span class="field-label">اسمك</span><input name="senderName" class="input"/></label>
-      <label class="field"><span class="field-label">بريدك *</span><input name="senderEmail" type="email" class="input" required/></label>
-      <label class="field"><span class="field-label">رسالتك *</span><textarea name="messageBody" class="input" rows="3" required></textarea></label>
-      <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> إرسال</button>
-    </form>
-  </div>
-</div>
-
-<!-- ★ المكتبات والسكربتات ★ -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="home/home.js"></script>
-</body>
-</html>
+  <!-- ★ قسم القصة والهدف (Story) ★ -->
+  <section class="story" id="story">
+    <div class="wrap">
+      <div class="story-inner">
+        <span class="story-tag"><i class="fa-solid fa-users-round"></i> الهدف</span>
+        <h2>لماذا «شريك»؟</h2>
+        <p>في جامعتنا تخصّصاتٌ كثيرة، وكلٌّ منها يرى نصف الصورة فقط: مَن يبرمج لا يعرف كيف ي
