@@ -1,14 +1,12 @@
 /* ============================================================
-   شريك — Universal Engine vFinal (All Pages Supported)
-   Handles: Home Search, Register Form, Dashboard Auth, Global UI.
+   شريك — Simple & Stable Engine (No Auth Complexity)
+   Strategy: Direct Read/Write to Firestore 'projects' collection.
+   Relies on Open Security Rules for simplicity and stability.
    ============================================================ */
 
 (function() {
   'use strict';
 
-  // ==========================================
-  // 1. Global Config & Init
-  // ==========================================
   const firebaseConfig = {
     apiKey: "AIzaSyCJC93gVdQgYjLUBOOW9JA0m_44xBximIs",
     authDomain: "shriki-813a9.firebaseapp.com",
@@ -18,46 +16,38 @@
     appId: "1:177417794605:web:c2a332887cb53787cfb4a4"
   };
 
-  let db, auth;
-  let isFirebaseReady = false;
-
+  let db;
+  
   document.addEventListener('DOMContentLoaded', () => {
     initFirebase();
-    bindGlobalUI(); // Events that work everywhere (Menu, Modals, Share)
+    bindGlobalUI();
     
     const page = document.body.dataset.page;
     if (page === 'home') initHomePage();
     else if (page === 'register') initRegisterPage();
     else if (page === 'dashboard') initDashboardPage();
-    else if (page === 'search') initSearchPage(); // Reuses home logic mostly
+    else if (page === 'search') initSearchPage();
     
-    // Set current year in footer
-    const yearEl = document.getElementById('year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    // Set Year
+    const y = document.getElementById('year');
+    if(y) y.textContent = new Date().getFullYear();
   });
 
   function initFirebase() {
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
-    auth = firebase.auth();
-    isFirebaseReady = true;
-    
-    // Try silent anonymous login for permissions
-    auth.signInAnonymously().catch(err => console.warn("Silent Auth Fail:", err));
+    console.log("✅ Firebase Ready (Direct Access Mode)");
   }
 
   // ==========================================
-  // 2. Global UI Logic (Works on ALL pages)
+  // Global UI (Menu, Modals, Share)
   // ==========================================
   function bindGlobalUI() {
-    // A. Mobile Menu Toggle
+    // Mobile Menu
     const menuBtn = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     if(menuBtn && navLinks) {
-      menuBtn.onclick = (e) => {
-        e.stopPropagation();
-        navLinks.classList.toggle('open');
-      };
+      menuBtn.onclick = (e) => { e.stopPropagation(); navLinks.classList.toggle('open'); };
       document.addEventListener('click', (e) => {
         if(navLinks.classList.contains('open') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
           navLinks.classList.remove('open');
@@ -65,13 +55,12 @@
       });
     }
 
-    // B. Contact Dropdown (Lightbulb)
+    // Contact Dropdown
     const contactBtn = document.getElementById('contactMenuBtn');
     const contactMenu = document.getElementById('contactMenu');
     if(contactBtn && contactMenu) {
       contactBtn.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         const isOpen = contactMenu.style.display === 'flex';
         document.querySelectorAll('.pop-menu').forEach(m => m.style.display = 'none');
         contactMenu.style.display = isOpen ? 'none' : 'flex';
@@ -79,18 +68,14 @@
       document.addEventListener('click', () => contactMenu.style.display = 'none');
     }
 
-    // C. Modals Open/Close
+    // Modals
     document.querySelectorAll('[data-open]').forEach(btn => {
       btn.onclick = (e) => {
         e.preventDefault();
         const modal = document.getElementById(btn.dataset.open);
-        if(modal) {
-          modal.classList.add('open');
-          document.body.style.overflow = 'hidden';
-        }
+        if(modal) { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
       };
     });
-    
     document.querySelectorAll('[data-close], .modal').forEach(el => {
       el.onclick = (e) => {
         if(e.target.matches('.modal') || e.target.closest('[data-close]')) {
@@ -100,65 +85,52 @@
       };
     });
 
-    // D. Share Buttons
+    // Share
     document.querySelectorAll('[data-share]').forEach(btn => {
       btn.onclick = async () => {
         const url = window.location.href;
-        if(navigator.share) {
-          try { await navigator.share({ title: 'شريك', text: 'منصة تكوين الفرق الجامعية', url }); } catch(e){}
-        } else {
-          try { await navigator.clipboard.writeText(url); alert('تم نسخ الرابط!'); } catch(e){ alert('انسخ يدويا.'); }
-        }
+        if(navigator.share) { try { await navigator.share({ title: 'شريك', text: 'منصة تكوين الفرق', url }); } catch(e){} }
+        else { try { await navigator.clipboard.writeText(url); alert('تم نسخ الرابط!'); } catch(e){ alert('انسخ يدويا.'); } }
       };
     });
 
-    // E. Generic Forms (Suggestion/Contact) - Simple Mock for Stability
+    // Forms Mock
     const sugForm = document.getElementById('sugForm');
-    if(sugForm) sugForm.onsubmit = (e) => { 
-      e.preventDefault(); 
-      alert('شكرا لك! تم استلام اقتراحك.'); 
-      sugForm.reset(); 
-      document.getElementById('suggestModal').classList.remove('open'); 
-    };
-    
+    if(sugForm) sugForm.onsubmit = (e) => { e.preventDefault(); alert('شكرا!'); sugForm.reset(); document.getElementById('suggestModal').classList.remove('open'); };
     const contForm = document.getElementById('directContactForm');
-    if(contForm) contForm.onsubmit = (e) => { 
-      e.preventDefault(); 
-      alert('وصلتنا رسالتك، سنرد قريبا.'); 
-      contForm.reset(); 
-      document.getElementById('contactModal').classList.remove('open'); 
-    };
+    if(contForm) contForm.onsubmit = (e) => { e.preventDefault(); alert('وصلتنا!'); contForm.reset(); document.getElementById('contactModal').classList.remove('open'); };
   }
 
   // ==========================================
-  // 3. Page Specific Logic: HOME
+  // HOME PAGE Logic
   // ==========================================
   function initHomePage() {
-    let projectsCache = [];
-    let currentState = { type: 'all', keyword: '', faculty: '' };
     const row = document.getElementById('teamsRow');
     const summary = document.getElementById('results-summary');
+    let cache = [];
+    let filters = { type: 'all', keyword: '', faculty: '' };
 
-    async function loadData() {
-      if(!isFirebaseReady || !row) return;
+    async function load() {
+      if(!row) return;
       row.innerHTML = `<div class="empty rail-empty"><i class="fa-solid fa-spinner fa-spin"></i><p>جارٍ التحميل...</p></div>`;
       try {
-        const snapshot = await db.collection('projects').orderBy('createdAt','desc').limit(50).get();
-        projectsCache = [];
-        snapshot.forEach(doc => projectsCache.push({id:doc.id, ...doc.data()}));
+        // DIRECT READ - No Auth Check needed anymore
+        const snap = await db.collection('projects').orderBy('createdAt','desc').limit(50).get();
+        cache = snap.docs.map(d => ({id:d.id, ...d.data()}));
         render();
       } catch(e) {
-        row.innerHTML = `<div class="empty rail-empty"><h3>تعذر الاتصال</h3></div>`;
+        console.error(e);
+        row.innerHTML = `<div class="empty rail-empty"><h3>خطأ في الاتصال</h3><p>${e.message}</p></div>`;
       }
     }
 
     function render() {
       if(!row) return;
-      let filtered = [...projectsCache];
-      if(currentState.type !== 'all') filtered = filtered.filter(p=>p.type===currentState.type);
-      if(currentState.faculty) filtered = filtered.filter(p=>p.faculty&&p.faculty.includes(currentState.faculty));
-      if(currentState.keyword.trim()) {
-        const t = currentState.keyword.toLowerCase();
+      let filtered = [...cache];
+      if(filters.type !== 'all') filtered = filtered.filter(p=>p.type===filters.type);
+      if(filters.faculty) filtered = filtered.filter(p=>p.faculty&&p.faculty.includes(filters.faculty));
+      if(filters.keyword.trim()) {
+        const t = filters.keyword.toLowerCase();
         filtered = filtered.filter(p=>(p.title||'').toLowerCase().includes(t)||(p.description||'').toLowerCase().includes(t));
       }
       
@@ -193,7 +165,7 @@
       tab.onclick = () => {
         document.querySelectorAll('.se-tab').forEach(t=>t.classList.remove('active'));
         tab.classList.add('active');
-        currentState.type = tab.dataset.type;
+        filters.type = tab.dataset.type;
         render();
       };
     });
@@ -202,26 +174,25 @@
     let debounce;
     if(searchInput) searchInput.oninput = (e)=>{
       clearTimeout(debounce);
-      debounce=setTimeout(()=>{currentState.keyword=e.target.value;render();},300);
+      debounce=setTimeout(()=>{filters.keyword=e.target.value;render();},300);
     };
 
     const facSelect = document.getElementById('local-faculty-select');
-    if(facSelect) facSelect.onchange = (e)=>{currentState.faculty=e.target.value;render();};
+    if(facSelect) facSelect.onchange = (e)=>{filters.faculty=e.target.value;render();};
 
-    loadData();
+    load();
   }
 
   // ==========================================
-  // 4. Page Specific Logic: REGISTER
+  // REGISTER PAGE Logic
   // ==========================================
   function initRegisterPage() {
     const form = document.getElementById('registerForm');
     if(!form) return;
 
-    // ★ IMPORTANT: Populate Selects Dynamically ★
     populateSelects();
 
-    // Handle Kind Tabs (Team vs Student)
+    // Kind Tabs
     const kindTabs = document.querySelectorAll('#kindTabs .seg-btn');
     const paneTeam = document.getElementById('paneTeam');
     const paneStudent = document.getElementById('paneStudent');
@@ -233,21 +204,13 @@
         btn.classList.add('active');
         const kind = btn.dataset.kind;
         kindField.value = kind;
-        
-        if(kind === 'team') {
-          paneTeam.hidden = false;
-          paneStudent.hidden = true;
-        } else {
-          paneTeam.hidden = true;
-          paneStudent.hidden = false;
-        }
+        if(kind === 'team') { paneTeam.hidden = false; paneStudent.hidden = true; }
+        else { paneTeam.hidden = true; paneStudent.hidden = false; }
       };
     });
 
     form.onsubmit = async (e) => {
       e.preventDefault();
-      if(!isFirebaseReady) return alert("انتظر تحميل النظام...");
-
       const btn = form.querySelector('button[type="submit"]');
       const origTxt = btn.innerText;
       btn.disabled=true; btn.innerText="جارٍ النشر...";
@@ -255,24 +218,24 @@
       const fd = new FormData(form);
       const kind = fd.get('kind');
       
-      const profileData = {
+      const data = {
         kind: kind,
         name: fd.get('name'),
         faculty: fd.get('faculty'),
         year: fd.get('year'),
-        email: fd.get('email'), // Stored for contact
+        email: fd.get('email'),
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
       if(kind === 'team') {
-        Object.assign(profileData, {
+        Object.assign(data, {
           title: fd.get('title'),
           description: fd.get('description'),
           type: fd.get('projectType'), 
           neededSkill: fd.get('neededSpecialties'),
         });
       } else {
-        Object.assign(profileData, {
+        Object.assign(data, {
           specialty: fd.get('specialty'),
           skills: fd.get('skills'),
           bio: fd.get('bio'),
@@ -280,10 +243,9 @@
       }
 
       try {
-        // Save to Firestore Collection 'projects'
-        await db.collection('projects').add(profileData);
+        // DIRECT WRITE - No Auth Check needed
+        await db.collection('projects').add(data);
         
-        // Show Success State
         form.hidden = true;
         const successState = document.getElementById('successState');
         if(successState) successState.hidden = false;
@@ -306,90 +268,72 @@
     const years = ["السنة الأولى","السنة الثانية","السنة الثالثة","السنة الرابعة","ماستر","دكتوراه"];
     const types = ["مذكرة تخرج","شركة ناشئة","مشروع خارج الجامعة","مسابقة / بحث علمي","مبادرة خيرية"];
 
-    const fillSelect = (selector, options, placeholder) => {
-      const el = document.querySelector(selector);
-      if(el) {
-        el.innerHTML = `<option value="" disabled selected>${placeholder}</option>` + 
-                       options.map(o => `<option value="${o}">${o}</option>`).join('');
-      }
+    const fill = (sel, opts, ph) => {
+      const el = document.querySelector(sel);
+      if(el) el.innerHTML = `<option value="" disabled selected>${ph}</option>` + opts.map(o=>`<option value="${o}">${o}</option>`).join('');
     };
 
-    fillSelect('select[name="faculty"]', faculties, 'اختر كليتك');
-    fillSelect('select[name="year"]', years, 'اختر سنتك');
-    fillSelect('select[name="projectType"]', types, 'اختر نوع المشروع');
+    fill('select[name="faculty"]', faculties, 'اختر كليتك');
+    fill('select[name="year"]', years, 'اختر سنتك');
+    fill('select[name="projectType"]', types, 'اختر نوع المشروع');
   }
 
   // ==========================================
-  // 5. Page Specific Logic: DASHBOARD
+  // DASHBOARD PAGE Logic (Simplified View)
   // ==========================================
   function initDashboardPage() {
     const gate = document.getElementById('gate');
     const panel = document.getElementById('panel');
     if(!gate || !panel) return;
 
-    // Check Auth Status
-    auth.onAuthStateChanged(user => {
-      if(user) {
-        loadUserProfile(user.uid);
-      } else {
-        showGate("لا توجد جلسة", "أنشئ ملفك لتبدأ.", "../register/register.html");
-      }
-    });
-
-    function showGate(title, msg, link) {
-      gate.hidden = false; panel.hidden = true;
-      const gTitle = document.getElementById('gateTitle');
-      const gText = document.getElementById('gateText');
-      const gBtn = document.getElementById('gateBtn');
-      
-      if(gTitle) gTitle.textContent = title;
-      if(gText) gText.textContent = msg;
-      if(gBtn) gBtn.onclick = ()=>location.href=link;
+    // Since we removed auth dependency for writing, Dashboard is now just a view of "My Projects"
+    // We can identify "My Projects" by matching the Email entered during registration? 
+    // Or simpler: Just show all projects as a management list for demo purposes until real auth is added back properly.
+    
+    gate.hidden = true; panel.hidden = false;
+    
+    const dashHead = document.getElementById('dashHead');
+    if(dashHead) {
+      dashHead.innerHTML = `
+        <div class="avatar">U</div>
+        <div>
+          <div class="dash-name">لوحة العرض العام</div>
+          <div class="dash-meta">جميع المشاريع المنشورة</div>
+        </div>
+      `;
     }
 
-    async function loadUserProfile(uid) {
-      try {
-        // Query projects owned by this user (assuming we store uid or match by email/name for demo)
-        // For robustness, let's assume we query all and filter client-side or use a dedicated 'users' collection.
-        // Here we'll just fetch recent projects for the demo dashboard view.
-        
-        const snap = await db.collection('projects').where('email', '==', auth.currentUser.email).limit(5).get();
-        
-        gate.hidden = true; panel.hidden = false;
-        
-        const dashHead = document.getElementById('dashHead');
-        if(dashHead) {
-          dashHead.innerHTML = `
-            <div class="avatar">U</div>
-            <div>
-              <div class="dash-name">مرحبا بك (${auth.currentUser.email})</div>
-              <div class="dash-meta">عدد مشاريعك: ${snap.size}</div>
-            </div>
-          `;
+    // Load all projects into dashboard list
+    const reqList = document.getElementById('reqList');
+    if(reqList) {
+      reqList.innerHTML = `<div class="empty"><h3>جارٍ التحميل...</h3></div>`;
+      db.collection('projects').orderBy('createdAt','desc').limit(20).get().then(snap => {
+        if(snap.empty) {
+          reqList.innerHTML = `<div class="empty"><h3>لا توجد مشاريع بعد</h3></div>`;
+          return;
         }
-
-        // Logout Button
-        const switchAcc = document.getElementById('switchAcc');
-        if(switchAcc) switchAcc.onclick = async ()=>{
-          if(confirm("إنهاء الجلسة؟")) {
-            await auth.signOut();
-            location.reload();
-          }
-        };
-
-      } catch(e) {
-        showGate("خطأ في التحميل", e.message, "#");
-      }
+        reqList.innerHTML = snap.docs.map(d => {
+          const p = d.data();
+          return `
+          <article class="req">
+            <div class="req-top">
+              <div class="avatar">${esc((p.name||'ط').charAt(0))}</div>
+              <div class="req-who"><b>${esc(p.title||p.name)}</b><span>${esc(p.faculty)}</span></div>
+              <span class="status accepted">${getTypeLabel(p.type)}</span>
+            </div>
+            <div class="req-msg">${esc(p.description||p.bio||'')}</div>
+            <div class="req-actions">
+              <a href="mailto:${esc(p.email)}" class="btn btn-primary btn-sm">تواصل</a>
+            </div>
+          </article>`;
+        }).join("");
+      }).catch(e => {
+        reqList.innerHTML = `<div class="empty"><h3>خطأ: ${e.message}</h3></div>`;
+      });
     }
   }
 
-  // ==========================================
-  // 6. Page Specific Logic: SEARCH
-  // ==========================================
-  function initSearchPage() {
-    // For now, reuse Home logic but maybe hide the Hero section if present
-    initHomePage(); 
-  }
+  function initSearchPage() { initHomePage(); }
 
   // Utilities
   function getTypeLabel(type) {
@@ -402,7 +346,7 @@
   }
   
   function esc(s) {
-    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"<").replace(/>/g,">");
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
 
 })();
